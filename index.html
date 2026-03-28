@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
 <title>E-Reader IA</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700&display=swap" rel="stylesheet">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
 
@@ -19,7 +19,7 @@
   }
 
   .header {
-    padding:16px 20px;
+    padding:14px 20px;
     display:flex;
     align-items:center;
     gap:12px;
@@ -27,15 +27,8 @@
     background:#0a0a0a;
     flex-shrink:0;
   }
-  .header-avatar {
-    width:38px; height:38px;
-    border-radius:12px;
-    background:linear-gradient(135deg, #6366f1, #8b5cf6);
-    display:flex; align-items:center; justify-content:center;
-    font-size:18px;
-    flex-shrink:0;
-  }
-  .header-info h1 { font-size:15px; font-weight:600; color:#f0f0f0; }
+  .header-logo { width:36px; height:36px; flex-shrink:0; }
+  .header-info h1 { font-size:15px; font-weight:600; color:#f0f0f0; font-family:'Outfit',sans-serif; letter-spacing:0.5px; }
   .header-info p { font-size:11px; color:#666; margin-top:1px; }
   .status-dot {
     width:7px; height:7px;
@@ -44,6 +37,138 @@
     display:inline-block;
     margin-right:4px;
     vertical-align:middle;
+  }
+
+  .level-btn {
+    margin-left:auto;
+    padding:6px 14px;
+    background:#161616;
+    border:1px solid #2a2a2a;
+    border-radius:20px;
+    color:#a5b4fc;
+    font-size:12px;
+    font-weight:500;
+    cursor:pointer;
+    font-family:inherit;
+    transition:all 0.2s;
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .level-btn:active { border-color:#6366f1; }
+  .level-btn .arrow { font-size:8px; color:#666; }
+
+  /* Level modal */
+  .level-overlay {
+    position:fixed; inset:0; z-index:200;
+    background:rgba(0,0,0,0.7);
+    backdrop-filter:blur(4px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    animation:fadeIn 0.2s ease;
+  }
+  .level-overlay.open { display:flex; }
+
+  .level-modal {
+    background:#161616;
+    border:1px solid #2a2a2a;
+    border-radius:20px;
+    padding:24px;
+    width:85%;
+    max-width:340px;
+    animation:modalSlide 0.3s ease;
+  }
+  @keyframes modalSlide {
+    from { opacity:0; transform:scale(0.95) translateY(10px); }
+    to { opacity:1; transform:scale(1) translateY(0); }
+  }
+
+  .level-modal h3 {
+    font-family:'Outfit',sans-serif;
+    font-size:16px;
+    font-weight:600;
+    margin-bottom:4px;
+    color:#f0f0f0;
+  }
+  .level-modal p {
+    font-size:12px;
+    color:#666;
+    margin-bottom:18px;
+  }
+
+  .modal-back {
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:13px;
+    color:#888;
+    cursor:pointer;
+    margin-bottom:14px;
+    padding:4px 0;
+    border:none;
+    background:none;
+    font-family:inherit;
+    transition:color 0.2s;
+  }
+  .modal-back:active { color:#fff; }
+
+  .level-option {
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:14px 16px;
+    background:#1e1e1e;
+    border:1px solid #2a2a2a;
+    border-radius:14px;
+    margin-bottom:8px;
+    cursor:pointer;
+    transition:all 0.2s;
+    font-family:inherit;
+    width:100%;
+    text-align:left;
+    color:#ddd;
+  }
+  .level-option:hover { border-color:#444; background:#222; }
+  .level-option:active { border-color:#6366f1; }
+  .level-option.selected { border-color:#6366f1; background:rgba(99,102,241,0.1); }
+
+  .level-option .level-icon {
+    width:40px; height:40px;
+    border-radius:12px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:20px;
+    flex-shrink:0;
+  }
+  .level-option .level-text { flex:1; }
+  .level-option .level-name { font-size:14px; font-weight:600; }
+  .level-option .level-desc { font-size:11px; color:#888; margin-top:2px; }
+
+  /* Class button (step 2 - more compact) */
+  .class-option {
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:12px 16px;
+    background:#1e1e1e;
+    border:1px solid #2a2a2a;
+    border-radius:12px;
+    margin-bottom:6px;
+    cursor:pointer;
+    transition:all 0.2s;
+    font-family:inherit;
+    width:100%;
+    text-align:left;
+    color:#ddd;
+    font-size:14px;
+    font-weight:500;
+  }
+  .class-option:hover { border-color:#444; background:#222; }
+  .class-option:active { border-color:#6366f1; }
+  .class-option .class-dot {
+    width:8px; height:8px;
+    border-radius:50%;
+    flex-shrink:0;
   }
 
   .chat-area {
@@ -69,17 +194,18 @@
     from { opacity:0; transform:translateY(10px); }
     to { opacity:1; transform:translateY(0); }
   }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
 
   .msg-avatar {
     width:30px; height:30px;
     border-radius:10px;
     display:flex; align-items:center; justify-content:center;
-    font-size:14px;
     flex-shrink:0;
     margin-top:2px;
+    overflow:hidden;
   }
   .msg-row.ai .msg-avatar { background:linear-gradient(135deg, #6366f1, #8b5cf6); }
-  .msg-row.user .msg-avatar { background:#333; }
+  .msg-row.user .msg-avatar { background:#333; font-size:14px; }
 
   .bubble {
     padding:12px 16px;
@@ -101,25 +227,13 @@
   }
 
   .bubble strong { color:#a5b4fc; font-weight:600; }
-  .bubble code {
-    background:#222;
-    padding:2px 6px;
-    border-radius:4px;
-    font-size:13px;
-    font-family:'SF Mono', 'Fira Code', monospace;
-  }
+  .bubble code { background:#222; padding:2px 6px; border-radius:4px; font-size:13px; }
   .bubble ul, .bubble ol { margin:8px 0 8px 18px; }
   .bubble li { margin-bottom:4px; }
 
-  .typing-indicator {
-    display:flex;
-    gap:4px;
-    padding:14px 18px;
-  }
+  .typing-indicator { display:flex; gap:4px; padding:14px 18px; }
   .typing-indicator span {
-    width:7px; height:7px;
-    background:#555;
-    border-radius:50%;
+    width:7px; height:7px; background:#555; border-radius:50%;
     animation: typing 1.4s ease-in-out infinite;
   }
   .typing-indicator span:nth-child(2) { animation-delay:0.2s; }
@@ -131,125 +245,183 @@
 
   .welcome {
     text-align:center;
-    padding:40px 30px;
-    animation: fadeIn 0.6s ease;
-  }
-  .welcome-icon {
-    width:56px; height:56px;
-    border-radius:16px;
-    background:linear-gradient(135deg, #6366f1, #8b5cf6);
-    display:flex; align-items:center; justify-content:center;
-    font-size:26px;
-    margin:0 auto 16px;
-  }
-  .welcome h2 { font-size:18px; font-weight:600; margin-bottom:6px; color:#f0f0f0; }
-  .welcome p { font-size:13px; color:#666; line-height:1.5; max-width:280px; margin:0 auto; }
-  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
-
-  .suggestions {
+    padding:30px 24px;
+    animation: fadeIn 0.8s ease;
     display:flex;
-    flex-wrap:wrap;
-    gap:8px;
-    justify-content:center;
-    margin-top:20px;
+    flex-direction:column;
+    align-items:center;
   }
-  .chip {
-    padding:8px 16px;
-    background:#161616;
-    border:1px solid #2a2a2a;
-    border-radius:20px;
-    font-size:13px;
-    color:#aaa;
-    cursor:pointer;
-    transition:all 0.2s;
-    font-family:inherit;
+  .welcome-logo {
+    width:100px; height:100px;
+    margin-bottom:20px;
+    animation: logoPulse 3s ease-in-out infinite;
   }
-  .chip:active { background:#222; border-color:#6366f1; color:#fff; }
+  @keyframes logoPulse {
+    0%,100% { filter:drop-shadow(0 0 8px rgba(99,102,241,0.3)); }
+    50% { filter:drop-shadow(0 0 20px rgba(99,102,241,0.5)); }
+  }
+  .welcome h2 {
+    font-family:'Outfit',sans-serif;
+    font-size:26px; font-weight:700;
+    margin-bottom:4px; color:#f0f0f0; letter-spacing:1px;
+  }
+  .welcome .slogan {
+    font-size:11px; color:#6366f1; letter-spacing:3px;
+    text-transform:uppercase; font-weight:600; margin-bottom:16px;
+  }
+  .welcome p { font-size:13px; color:#666; line-height:1.6; max-width:300px; margin:0 auto; }
+  .welcome .hint {
+    margin-top:20px; font-size:12px; color:#555;
+    display:flex; align-items:center; gap:6px;
+  }
+  .welcome .hint span { color:#6366f1; }
 
   .input-bar {
     padding:12px 16px;
     padding-bottom:max(12px, env(safe-area-inset-bottom));
-    display:flex;
-    gap:8px;
-    align-items:flex-end;
+    display:flex; gap:8px; align-items:flex-end;
     border-top:1px solid #1a1a1a;
-    background:#0a0a0a;
-    flex-shrink:0;
+    background:#0a0a0a; flex-shrink:0;
   }
   .input-wrapper {
-    flex:1;
-    background:#161616;
-    border:1px solid #2a2a2a;
-    border-radius:22px;
-    display:flex;
-    align-items:flex-end;
-    transition:border-color 0.2s;
-    padding:4px;
+    flex:1; background:#161616; border:1px solid #2a2a2a;
+    border-radius:22px; display:flex; align-items:flex-end;
+    transition:border-color 0.2s; padding:4px;
   }
   .input-wrapper:focus-within { border-color:#6366f1; }
   .input-field {
-    flex:1;
-    padding:10px 14px;
-    background:transparent;
-    border:none;
-    color:#fff;
-    font-size:15px;
-    outline:none;
-    font-family:inherit;
-    resize:none;
-    max-height:100px;
-    line-height:1.4;
+    flex:1; padding:10px 14px; background:transparent; border:none;
+    color:#fff; font-size:15px; outline:none; font-family:inherit;
+    resize:none; max-height:100px; line-height:1.4;
   }
   .input-field::placeholder { color:#555; }
   .send-btn {
-    width:40px; height:40px;
-    border-radius:50%;
-    background:#6366f1;
-    border:none;
-    color:#fff;
-    font-size:18px;
-    display:flex; align-items:center; justify-content:center;
-    cursor:pointer;
-    transition:all 0.2s;
-    flex-shrink:0;
+    width:40px; height:40px; border-radius:50%; background:#6366f1;
+    border:none; color:#fff; display:flex; align-items:center;
+    justify-content:center; cursor:pointer; transition:all 0.2s; flex-shrink:0;
   }
   .send-btn:active { transform:scale(0.9); }
   .send-btn:disabled { opacity:0.3; }
   .send-btn svg {
-    width:18px; height:18px;
-    fill:none;
-    stroke:currentColor;
-    stroke-width:2.5;
-    stroke-linecap:round;
-    stroke-linejoin:round;
+    width:18px; height:18px; fill:none; stroke:currentColor;
+    stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round;
   }
 </style>
 </head>
 <body>
 
+<!-- LOGO SVG -->
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="logoGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <linearGradient id="logoGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a5b4fc"/><stop offset="100%" stop-color="#6366f1"/>
+    </linearGradient>
+  </defs>
+  <symbol id="appLogo" viewBox="0 0 120 120">
+    <circle cx="60" cy="60" r="56" fill="#161616" stroke="url(#logoGrad1)" stroke-width="2"/>
+    <ellipse cx="60" cy="60" rx="30" ry="30" fill="none" stroke="url(#logoGrad2)" stroke-width="1" opacity="0.25"/>
+    <ellipse cx="60" cy="60" rx="15" ry="30" fill="none" stroke="url(#logoGrad2)" stroke-width="1" opacity="0.2"/>
+    <line x1="30" y1="60" x2="90" y2="60" stroke="url(#logoGrad2)" stroke-width="1" opacity="0.2"/>
+    <line x1="35" y1="45" x2="85" y2="45" stroke="url(#logoGrad2)" stroke-width="0.8" opacity="0.15"/>
+    <line x1="35" y1="75" x2="85" y2="75" stroke="url(#logoGrad2)" stroke-width="0.8" opacity="0.15"/>
+    <path d="M38 52 L58 48 L58 82 L38 78 Z" fill="url(#logoGrad1)" opacity="0.9"/>
+    <path d="M82 52 L62 48 L62 82 L82 78 Z" fill="url(#logoGrad1)" opacity="0.7"/>
+    <line x1="46" y1="56" x2="54" y2="54" stroke="#a5b4fc" stroke-width="1" opacity="0.6"/>
+    <line x1="46" y1="61" x2="54" y2="59" stroke="#a5b4fc" stroke-width="1" opacity="0.5"/>
+    <line x1="46" y1="66" x2="54" y2="64" stroke="#a5b4fc" stroke-width="1" opacity="0.4"/>
+    <line x1="66" y1="54" x2="74" y2="56" stroke="#a5b4fc" stroke-width="1" opacity="0.6"/>
+    <line x1="66" y1="59" x2="74" y2="61" stroke="#a5b4fc" stroke-width="1" opacity="0.5"/>
+    <line x1="66" y1="64" x2="74" y2="66" stroke="#a5b4fc" stroke-width="1" opacity="0.4"/>
+    <circle cx="50" cy="36" r="3" fill="#a5b4fc" opacity="0.8"/>
+    <circle cx="60" cy="30" r="3.5" fill="#8b5cf6"/>
+    <circle cx="70" cy="36" r="3" fill="#a5b4fc" opacity="0.8"/>
+    <circle cx="45" cy="42" r="2" fill="#6366f1" opacity="0.6"/>
+    <circle cx="75" cy="42" r="2" fill="#6366f1" opacity="0.6"/>
+    <circle cx="60" cy="40" r="2.5" fill="#a5b4fc" opacity="0.7"/>
+    <line x1="50" y1="36" x2="60" y2="30" stroke="#a5b4fc" stroke-width="1" opacity="0.5"/>
+    <line x1="70" y1="36" x2="60" y2="30" stroke="#a5b4fc" stroke-width="1" opacity="0.5"/>
+    <line x1="50" y1="36" x2="60" y2="40" stroke="#a5b4fc" stroke-width="0.8" opacity="0.4"/>
+    <line x1="70" y1="36" x2="60" y2="40" stroke="#a5b4fc" stroke-width="0.8" opacity="0.4"/>
+    <line x1="45" y1="42" x2="50" y2="36" stroke="#6366f1" stroke-width="0.8" opacity="0.3"/>
+    <line x1="75" y1="42" x2="70" y2="36" stroke="#6366f1" stroke-width="0.8" opacity="0.3"/>
+    <circle cx="60" cy="58" r="4" fill="#a5b4fc" opacity="0.15"/>
+    <circle cx="60" cy="58" r="2" fill="#fff" opacity="0.4"/>
+  </symbol>
+</svg>
+
+<!-- Header -->
 <div class="header">
-  <div class="header-avatar">🧠</div>
+  <svg class="header-logo"><use href="#appLogo"/></svg>
   <div class="header-info">
-    <h1>Assistant Socratique</h1>
+    <h1>E-Reader IA</h1>
     <p><span class="status-dot"></span>En ligne</p>
   </div>
+  <button class="level-btn" id="levelBtn" onclick="openLevelModal()">
+    <span id="levelLabel">🎓 Choisir niveau</span>
+    <span class="arrow">▼</span>
+  </button>
 </div>
 
-<div class="chat-area" id="chat">
-  <div class="welcome" id="welcome">
-    <div class="welcome-icon">📖</div>
-    <h2>E-Reader IA</h2>
-    <p>Pose une question sur tes cours. Je te guiderai par la méthode socratique pour t'aider à comprendre par toi-même.</p>
-    <div class="suggestions">
-      <button class="chip" onclick="sendChip(this)">⚛️ Physique-Chimie</button>
-      <button class="chip" onclick="sendChip(this)">🧬 SVT</button>
-      <button class="chip" onclick="sendChip(this)">📐 Maths</button>
-      <button class="chip" onclick="sendChip(this)">🌍 Histoire-Géo</button>
-      <button class="chip" onclick="sendChip(this)">📝 Aide aux devoirs</button>
+<!-- Level selector modal -->
+<div class="level-overlay" id="levelOverlay" onclick="closeLevelModal(event)">
+  <div class="level-modal" onclick="event.stopPropagation()">
+
+    <!-- ÉTAPE 1 : Choix du cycle -->
+    <div id="step1">
+      <h3>Quel est ton niveau ?</h3>
+      <p>L'IA adaptera ses explications à ta classe.</p>
+
+      <button class="level-option" onclick="showStep2('primaire')">
+        <div class="level-icon" style="background:rgba(34,197,94,0.15)">🌱</div>
+        <div class="level-text">
+          <div class="level-name">Primaire</div>
+          <div class="level-desc">CP → CM2</div>
+        </div>
+      </button>
+
+      <button class="level-option" onclick="showStep2('college')">
+        <div class="level-icon" style="background:rgba(59,130,246,0.15)">📘</div>
+        <div class="level-text">
+          <div class="level-name">Collège</div>
+          <div class="level-desc">6ème → 3ème</div>
+        </div>
+      </button>
+
+      <button class="level-option" onclick="showStep2('lycee')">
+        <div class="level-icon" style="background:rgba(99,102,241,0.15)">🎓</div>
+        <div class="level-text">
+          <div class="level-name">Lycée</div>
+          <div class="level-desc">Seconde → Terminale</div>
+        </div>
+      </button>
     </div>
+
+    <!-- ÉTAPE 2 : Choix de la classe -->
+    <div id="step2" style="display:none">
+      <button class="modal-back" onclick="backToStep1()">← Retour</button>
+      <h3 id="step2Title"></h3>
+      <p>Choisis ta classe exacte.</p>
+      <div id="classOptions"></div>
+    </div>
+
   </div>
 </div>
 
+<!-- Chat -->
+<div class="chat-area" id="chat">
+  <div class="welcome" id="welcome">
+    <svg class="welcome-logo"><use href="#appLogo"/></svg>
+    <h2>E-Reader IA</h2>
+    <div class="slogan">Comprendre le monde par le savoir</div>
+    <p>Pose une question sur tes cours. L'IA te guide par la méthode socratique pour t'aider à comprendre par toi-même.</p>
+    <div class="hint">☝️ <span>Choisis ton niveau</span> en haut à droite pour commencer</div>
+  </div>
+</div>
+
+<!-- Input -->
 <div class="input-bar">
   <div class="input-wrapper">
     <textarea class="input-field" id="input" placeholder="Demander quelque chose..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
@@ -261,16 +433,134 @@
 
 <script>
 const API_KEY = 'AIzaSyChJE-a1DWu4st-9offPDT9ySQ0jZOdUew';
-const MODEL = 'gemini-2.5-flash-preview-04-17';
 
-const SYSTEM_PROMPT = `Tu es un assistant pédagogique intégré dans une liseuse éducative pour éléves français
-Tu ne donne JAMAIS le réponse diréctement. Tu guide l'élève étape par étape en l'accompagant. Tu utlise la méthode soctartique. Si besoins tu peux l'ammener a des rappel de leçon adapté au niveau de l'élève
-Tu parle à des élève de tous les niveau scolaire (primaire ; collége ; lycée) Tu tutoies l'élève. Tu le met en confiance, tu es bienveillant et encourageant tout en le motivant à avancer et à reculer ses limites
-Tu couvre l'ensemble des disciplines
-Tu es concis, tu adapte le vocaulaire en foction du niveau de l'élève tout en vulgarisant les concept complexe si besoins. Tu utilises des emojis avec parcimonie. Tu structure avce du gras pour les mots et concept importants
-Tu refuse poliment les sujet hors programme solaire. Tu ne fait en aucun cas les devoirs à la place de l'élève même si celui-ci te le demande de façon insistante`;
-
+let currentClass = null;
 let history = [];
+
+const CLASSES = {
+  primaire: {
+    title: '🌱 Primaire',
+    color: '#22c55e',
+    options: [
+      { id: 'cp', label: 'CP', age: '6 ans' },
+      { id: 'ce1', label: 'CE1', age: '7 ans' },
+      { id: 'ce2', label: 'CE2', age: '8 ans' },
+      { id: 'cm1', label: 'CM1', age: '9 ans' },
+      { id: 'cm2', label: 'CM2', age: '10 ans' },
+    ]
+  },
+  college: {
+    title: '📘 Collège',
+    color: '#3b82f6',
+    options: [
+      { id: '6eme', label: '6ème', age: '11 ans' },
+      { id: '5eme', label: '5ème', age: '12 ans' },
+      { id: '4eme', label: '4ème', age: '13 ans' },
+      { id: '3eme', label: '3ème', age: '14 ans' },
+    ]
+  },
+  lycee: {
+    title: '🎓 Lycée',
+    color: '#6366f1',
+    options: [
+      { id: 'seconde', label: 'Seconde', age: '15 ans' },
+      { id: 'premiere', label: 'Première', age: '16 ans' },
+      { id: 'terminale', label: 'Terminale', age: '17 ans' },
+    ]
+  }
+};
+
+const CLASS_PROMPTS = {
+  cp: `NIVEAU : CP (environ 6 ans). Utilise des mots très simples, des phrases très courtes. Explique comme à un tout petit enfant. Donne des exemples avec des objets que l'enfant connaît (jouets, animaux, famille). Sois très chaleureux et patient.`,
+  ce1: `NIVEAU : CE1 (environ 7 ans). Vocabulaire simple, phrases courtes. L'élève commence à lire et écrire. Exemples concrets du quotidien. Très encourageant.`,
+  ce2: `NIVEAU : CE2 (environ 8 ans). Vocabulaire simple mais un peu plus riche qu'en CE1. L'élève sait lire. Tu peux faire des petites explications avec des exemples imagés.`,
+  cm1: `NIVEAU : CM1 (environ 9 ans). L'élève commence à aborder des notions plus complexes. Tu peux utiliser des termes un peu plus précis mais toujours les expliquer. Exemples concrets.`,
+  cm2: `NIVEAU : CM2 (environ 10 ans). Dernier niveau du primaire, l'élève se prépare pour le collège. Tu peux aborder des sujets avec un peu plus de profondeur tout en restant accessible.`,
+  '6eme': `NIVEAU : 6ème (environ 11 ans). Entrée au collège. L'élève découvre de nouvelles matières. Vocabulaire accessible, introduction progressive de termes techniques toujours expliqués. Exemples de la vie courante des ados.`,
+  '5eme': `NIVEAU : 5ème (environ 12 ans). L'élève est habitué au collège. Tu peux utiliser un vocabulaire plus riche, introduire des termes scientifiques et les expliquer. Commence à développer le raisonnement.`,
+  '4eme': `NIVEAU : 4ème (environ 13 ans). Niveau intermédiaire du collège. Les notions se complexifient. Tu peux aller plus en profondeur, utiliser des termes techniques avec explications concises. Encourage l'esprit critique.`,
+  '3eme': `NIVEAU : 3ème (environ 14 ans). Dernière année de collège, préparation au brevet. L'élève doit maîtriser un vocabulaire précis. Tu peux être plus exigeant sur la rigueur du raisonnement. Prépare-le aux méthodes du lycée.`,
+  seconde: `NIVEAU : Seconde (environ 15 ans). Entrée au lycée. L'élève doit acquérir rigueur et méthode. Vocabulaire technique précis. Tu peux aller dans le détail des concepts. Encourage l'autonomie et la réflexion critique.`,
+  premiere: `NIVEAU : Première (environ 16 ans). L'élève prépare le bac de français et ses spécialités. Exigence élevée. Tu peux utiliser un vocabulaire riche et technique sans simplification excessive. Développe l'argumentation et l'analyse.`,
+  terminale: `NIVEAU : Terminale (environ 17 ans). Dernière année avant le bac et l'enseignement supérieur. Exigence maximale au lycée. Vocabulaire précis, raisonnements approfondis, esprit critique, préparation aux études supérieures.`
+};
+
+const BASE_PROMPT = `Tu es un assistant pédagogique intégré dans une liseuse éducative pour élèves français.
+
+MÉTHODE SOCRATIQUE (obligatoire) :
+- Tu ne donnes JAMAIS la réponse directement.
+- Tu poses d'abord une question pour comprendre ce que l'élève sait déjà.
+- Tu le guides étape par étape en l'accompagnant.
+- Si besoins tu peux l'ammener a des rappels de leçons adaptées au niveau de l'élève.
+
+MATIÈRES : Toutes les matières scolaires (Maths, Français, Histoire-Géo, Physique-Chimie, SVT, Philosophie, NSI, SES, langues, etc.)
+
+STYLE :
+- Tu es concis. Réponses courtes et claires, pas de pavés.
+- Tu utilises du **gras** pour les mots et concepts importants.
+- Tu utilises des emojis avec parcimonie (1-2 max par message).
+- Tu tutoies l'élève. Tu es bienveillant et encourageant tout en étant exigeant.
+- Tu adapte le vocaulaire en fonction du niveau de l'élève tout en vulgarisant les concepts complexes si besoins.
+
+LIMITES :
+- Tu refuses poliment les sujets hors programme scolaire.
+- Tu ne fais JAMAIS les devoirs à la place de l'élève même si celui-ci te le demande de façon institante.
+- Si l'élève insiste pour la réponse, tu expliques pourquoi comprendre par soi-même est plus important.`;
+
+function getSystemPrompt() {
+  const classPrompt = currentClass ? CLASS_PROMPTS[currentClass] : 'NIVEAU : Non spécifié. Adapte-toi au langage de l\'élève.';
+  return BASE_PROMPT + '\n\n' + classPrompt;
+}
+
+// Level modal - Step 1
+function openLevelModal() {
+  document.getElementById('step1').style.display = 'block';
+  document.getElementById('step2').style.display = 'none';
+  document.getElementById('levelOverlay').classList.add('open');
+}
+function closeLevelModal(e) {
+  if (e.target === document.getElementById('levelOverlay')) {
+    document.getElementById('levelOverlay').classList.remove('open');
+  }
+}
+
+// Level modal - Step 2
+function showStep2(cycle) {
+  const data = CLASSES[cycle];
+  document.getElementById('step1').style.display = 'none';
+  document.getElementById('step2').style.display = 'block';
+  document.getElementById('step2Title').textContent = data.title;
+
+  const container = document.getElementById('classOptions');
+  container.innerHTML = '';
+
+  data.options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'class-option';
+    btn.innerHTML = `
+      <div class="class-dot" style="background:${data.color}"></div>
+      ${opt.label}
+      <span style="margin-left:auto;font-size:11px;color:#666">${opt.age}</span>
+    `;
+    btn.onclick = () => selectClass(opt.id, opt.label, data.title);
+    container.appendChild(btn);
+  });
+}
+
+function backToStep1() {
+  document.getElementById('step1').style.display = 'block';
+  document.getElementById('step2').style.display = 'none';
+}
+
+function selectClass(classId, classLabel, cycleTitle) {
+  currentClass = classId;
+  document.getElementById('levelLabel').textContent = `${cycleTitle.split(' ')[0]} ${classLabel}`;
+  history = [];
+
+  setTimeout(() => {
+    document.getElementById('levelOverlay').classList.remove('open');
+  }, 150);
+}
 
 function handleKey(e) {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); ask(); }
@@ -281,17 +571,14 @@ function autoResize(el) {
   el.style.height = Math.min(el.scrollHeight, 100) + 'px';
 }
 
-function sendChip(el) {
-  document.getElementById('input').value = `J'ai besoin d'aide en ${el.textContent.trim()}`;
-  ask();
-}
-
 async function ask() {
   const input = document.getElementById('input');
   const chat = document.getElementById('chat');
   const btn = document.getElementById('sendBtn');
   const question = input.value.trim();
   if (!question) return;
+
+  if (!currentClass) { openLevelModal(); return; }
 
   const welcome = document.getElementById('welcome');
   if (welcome) welcome.remove();
@@ -306,24 +593,15 @@ async function ask() {
   typingRow.className = 'msg-row ai';
   typingRow.id = typingId;
   typingRow.innerHTML = `
-    <div class="msg-avatar">🧠</div>
-    <div class="bubble">
-      <div class="typing-indicator"><span></span><span></span><span></span></div>
-    </div>
+    <div class="msg-avatar"><svg width="20" height="20"><use href="#appLogo"/></svg></div>
+    <div class="bubble"><div class="typing-indicator"><span></span><span></span><span></span></div></div>
   `;
   chat.appendChild(typingRow);
   chat.scrollTop = chat.scrollHeight;
 
   history.push({ role: 'user', parts: [{ text: question }] });
 
-  // Liste de modèles à essayer dans l'ordre
-  const models = [
-    'gemini-2.5-flash-preview-04-17',
-    'gemini-2.5-flash',
-    'gemini-2.5-flash-lite',
-    'gemini-2.0-flash'
-  ];
-
+  const models = ['gemini-2.5-flash-preview-04-17','gemini-2.5-flash','gemini-2.5-flash-lite'];
   let success = false;
 
   for (const model of models) {
@@ -334,44 +612,27 @@ async function ask() {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+            system_instruction: { parts: [{ text: getSystemPrompt() }] },
             contents: history
           })
         }
       );
-
       const data = await res.json();
-
-      if (data?.error) {
-        console.log(`${model} erreur:`, data.error.message);
-        continue;
-      }
-
+      if (data?.error) { continue; }
       const answer = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (!answer) {
-        console.log(`${model} pas de réponse`);
-        continue;
-      }
-
+      if (!answer) { continue; }
       history.push({ role: 'model', parts: [{ text: answer }] });
       const typing = document.getElementById(typingId);
       if (typing) typing.querySelector('.bubble').innerHTML = formatText(answer);
-      console.log('Modèle utilisé:', model);
       success = true;
       break;
-
-    } catch (e) {
-      console.log(`${model} fetch erreur:`, e.message);
-      continue;
-    }
+    } catch (e) { continue; }
   }
 
   if (!success) {
     history.pop();
     const typing = document.getElementById(typingId);
-    if (typing) {
-      typing.querySelector('.bubble').innerHTML = '<span style="color:#ef4444">Aucun modèle disponible. Vérifie ta connexion internet et ta clé API.</span>';
-    }
+    if (typing) typing.querySelector('.bubble').innerHTML = '<span style="color:#ef4444">Erreur de connexion. Vérifie ton internet.</span>';
   }
 
   btn.disabled = false;
@@ -383,21 +644,16 @@ function addMessage(text, type) {
   const chat = document.getElementById('chat');
   const row = document.createElement('div');
   row.className = `msg-row ${type}`;
-  const avatar = type === 'user' ? '👤' : '🧠';
-  const content = type === 'user' ? escapeHtml(text) : formatText(text);
-  row.innerHTML = `
-    <div class="msg-avatar">${avatar}</div>
-    <div class="bubble">${content}</div>
-  `;
+  if (type === 'user') {
+    row.innerHTML = `<div class="msg-avatar">👤</div><div class="bubble">${escapeHtml(text)}</div>`;
+  } else {
+    row.innerHTML = `<div class="msg-avatar"><svg width="20" height="20"><use href="#appLogo"/></svg></div><div class="bubble">${formatText(text)}</div>`;
+  }
   chat.appendChild(row);
   chat.scrollTop = chat.scrollHeight;
 }
 
-function escapeHtml(t) {
-  const d = document.createElement('div');
-  d.textContent = t;
-  return d.innerHTML;
-}
+function escapeHtml(t) { const d=document.createElement('div'); d.textContent=t; return d.innerHTML; }
 
 function formatText(t) {
   return t
