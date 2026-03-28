@@ -58,7 +58,6 @@
   .level-btn:active { border-color:#6366f1; }
   .level-btn .arrow { font-size:8px; color:#666; }
 
-  /* Level modal */
   .level-overlay {
     position:fixed; inset:0; z-index:200;
     background:rgba(0,0,0,0.7);
@@ -131,7 +130,6 @@
   }
   .level-option:hover { border-color:#444; background:#222; }
   .level-option:active { border-color:#6366f1; }
-  .level-option.selected { border-color:#6366f1; background:rgba(99,102,241,0.1); }
 
   .level-option .level-icon {
     width:40px; height:40px;
@@ -144,7 +142,6 @@
   .level-option .level-name { font-size:14px; font-weight:600; }
   .level-option .level-desc { font-size:11px; color:#888; margin-top:2px; }
 
-  /* Class button (step 2 - more compact) */
   .class-option {
     display:flex;
     align-items:center;
@@ -310,7 +307,6 @@
 </head>
 <body>
 
-<!-- LOGO SVG -->
 <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="logoGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -352,7 +348,6 @@
   </symbol>
 </svg>
 
-<!-- Header -->
 <div class="header">
   <svg class="header-logo"><use href="#appLogo"/></svg>
   <div class="header-info">
@@ -365,52 +360,33 @@
   </button>
 </div>
 
-<!-- Level selector modal -->
 <div class="level-overlay" id="levelOverlay" onclick="closeLevelModal(event)">
   <div class="level-modal" onclick="event.stopPropagation()">
-
-    <!-- ÉTAPE 1 : Choix du cycle -->
     <div id="step1">
       <h3>Quel est ton niveau ?</h3>
       <p>L'IA adaptera ses explications à ta classe.</p>
-
       <button class="level-option" onclick="showStep2('primaire')">
         <div class="level-icon" style="background:rgba(34,197,94,0.15)">🌱</div>
-        <div class="level-text">
-          <div class="level-name">Primaire</div>
-          <div class="level-desc">CP → CM2</div>
-        </div>
+        <div class="level-text"><div class="level-name">Primaire</div><div class="level-desc">CP → CM2</div></div>
       </button>
-
       <button class="level-option" onclick="showStep2('college')">
         <div class="level-icon" style="background:rgba(59,130,246,0.15)">📘</div>
-        <div class="level-text">
-          <div class="level-name">Collège</div>
-          <div class="level-desc">6ème → 3ème</div>
-        </div>
+        <div class="level-text"><div class="level-name">Collège</div><div class="level-desc">6ème → 3ème</div></div>
       </button>
-
       <button class="level-option" onclick="showStep2('lycee')">
         <div class="level-icon" style="background:rgba(99,102,241,0.15)">🎓</div>
-        <div class="level-text">
-          <div class="level-name">Lycée</div>
-          <div class="level-desc">Seconde → Terminale</div>
-        </div>
+        <div class="level-text"><div class="level-name">Lycée</div><div class="level-desc">Seconde → Terminale</div></div>
       </button>
     </div>
-
-    <!-- ÉTAPE 2 : Choix de la classe -->
     <div id="step2" style="display:none">
       <button class="modal-back" onclick="backToStep1()">← Retour</button>
       <h3 id="step2Title"></h3>
       <p>Choisis ta classe exacte.</p>
       <div id="classOptions"></div>
     </div>
-
   </div>
 </div>
 
-<!-- Chat -->
 <div class="chat-area" id="chat">
   <div class="welcome" id="welcome">
     <svg class="welcome-logo"><use href="#appLogo"/></svg>
@@ -421,7 +397,6 @@
   </div>
 </div>
 
-<!-- Input -->
 <div class="input-bar">
   <div class="input-wrapper">
     <textarea class="input-field" id="input" placeholder="Demander quelque chose..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
@@ -439,80 +414,56 @@ let history = [];
 
 const CLASSES = {
   primaire: {
-    title: '🌱 Primaire',
-    color: '#22c55e',
+    title: '🌱 Primaire', color: '#22c55e',
     options: [
       { id: 'cp', label: 'CP', age: '6 ans' },
       { id: 'ce1', label: 'CE1', age: '7 ans' },
       { id: 'ce2', label: 'CE2', age: '8 ans' },
       { id: 'cm1', label: 'CM1', age: '9 ans' },
-      { id: 'cm2', label: 'CM2', age: '10 ans' },
+      { id: 'cm2', label: 'CM2', age: '10 ans' }
     ]
   },
   college: {
-    title: '📘 Collège',
-    color: '#3b82f6',
+    title: '📘 Collège', color: '#3b82f6',
     options: [
       { id: '6eme', label: '6ème', age: '11 ans' },
       { id: '5eme', label: '5ème', age: '12 ans' },
       { id: '4eme', label: '4ème', age: '13 ans' },
-      { id: '3eme', label: '3ème', age: '14 ans' },
+      { id: '3eme', label: '3ème', age: '14 ans' }
     ]
   },
   lycee: {
-    title: '🎓 Lycée',
-    color: '#6366f1',
+    title: '🎓 Lycée', color: '#6366f1',
     options: [
       { id: 'seconde', label: 'Seconde', age: '15 ans' },
       { id: 'premiere', label: 'Première', age: '16 ans' },
-      { id: 'terminale', label: 'Terminale', age: '17 ans' },
+      { id: 'terminale', label: 'Terminale', age: '17 ans' }
     ]
   }
 };
 
 const CLASS_PROMPTS = {
-  cp: `NIVEAU : CP (environ 6 ans). Utilise des mots très simples, des phrases très courtes. Explique comme à un tout petit enfant. Donne des exemples avec des objets que l'enfant connaît (jouets, animaux, famille). Sois très chaleureux et patient.`,
-  ce1: `NIVEAU : CE1 (environ 7 ans). Vocabulaire simple, phrases courtes. L'élève commence à lire et écrire. Exemples concrets du quotidien. Très encourageant.`,
-  ce2: `NIVEAU : CE2 (environ 8 ans). Vocabulaire simple mais un peu plus riche qu'en CE1. L'élève sait lire. Tu peux faire des petites explications avec des exemples imagés.`,
-  cm1: `NIVEAU : CM1 (environ 9 ans). L'élève commence à aborder des notions plus complexes. Tu peux utiliser des termes un peu plus précis mais toujours les expliquer. Exemples concrets.`,
-  cm2: `NIVEAU : CM2 (environ 10 ans). Dernier niveau du primaire, l'élève se prépare pour le collège. Tu peux aborder des sujets avec un peu plus de profondeur tout en restant accessible.`,
-  '6eme': `NIVEAU : 6ème (environ 11 ans). Entrée au collège. L'élève découvre de nouvelles matières. Vocabulaire accessible, introduction progressive de termes techniques toujours expliqués. Exemples de la vie courante des ados.`,
-  '5eme': `NIVEAU : 5ème (environ 12 ans). L'élève est habitué au collège. Tu peux utiliser un vocabulaire plus riche, introduire des termes scientifiques et les expliquer. Commence à développer le raisonnement.`,
-  '4eme': `NIVEAU : 4ème (environ 13 ans). Niveau intermédiaire du collège. Les notions se complexifient. Tu peux aller plus en profondeur, utiliser des termes techniques avec explications concises. Encourage l'esprit critique.`,
-  '3eme': `NIVEAU : 3ème (environ 14 ans). Dernière année de collège, préparation au brevet. L'élève doit maîtriser un vocabulaire précis. Tu peux être plus exigeant sur la rigueur du raisonnement. Prépare-le aux méthodes du lycée.`,
-  seconde: `NIVEAU : Seconde (environ 15 ans). Entrée au lycée. L'élève doit acquérir rigueur et méthode. Vocabulaire technique précis. Tu peux aller dans le détail des concepts. Encourage l'autonomie et la réflexion critique.`,
-  premiere: `NIVEAU : Première (environ 16 ans). L'élève prépare le bac de français et ses spécialités. Exigence élevée. Tu peux utiliser un vocabulaire riche et technique sans simplification excessive. Développe l'argumentation et l'analyse.`,
-  terminale: `NIVEAU : Terminale (environ 17 ans). Dernière année avant le bac et l'enseignement supérieur. Exigence maximale au lycée. Vocabulaire précis, raisonnements approfondis, esprit critique, préparation aux études supérieures.`
+  cp: 'NIVEAU : CP (environ 6 ans). Utilise des mots très simples, des phrases très courtes. Explique comme à un tout petit enfant. Donne des exemples avec des objets que l\'enfant connaît (jouets, animaux, famille). Sois très chaleureux et patient.',
+  ce1: 'NIVEAU : CE1 (environ 7 ans). Vocabulaire simple, phrases courtes. L\'élève commence à lire et écrire. Exemples concrets du quotidien. Très encourageant.',
+  ce2: 'NIVEAU : CE2 (environ 8 ans). Vocabulaire simple mais un peu plus riche. L\'élève sait lire. Tu peux faire des petites explications avec des exemples imagés.',
+  cm1: 'NIVEAU : CM1 (environ 9 ans). L\'élève commence à aborder des notions plus complexes. Tu peux utiliser des termes un peu plus précis mais toujours les expliquer.',
+  cm2: 'NIVEAU : CM2 (environ 10 ans). Dernier niveau du primaire. Tu peux aborder des sujets avec un peu plus de profondeur tout en restant accessible.',
+  '6eme': 'NIVEAU : 6ème (environ 11 ans). Entrée au collège. Vocabulaire accessible, introduction progressive de termes techniques toujours expliqués.',
+  '5eme': 'NIVEAU : 5ème (environ 12 ans). Tu peux utiliser un vocabulaire plus riche, introduire des termes scientifiques et les expliquer.',
+  '4eme': 'NIVEAU : 4ème (environ 13 ans). Les notions se complexifient. Tu peux aller plus en profondeur, utiliser des termes techniques avec explications concises.',
+  '3eme': 'NIVEAU : 3ème (environ 14 ans). Préparation au brevet. L\'élève doit maîtriser un vocabulaire précis. Sois plus exigeant sur la rigueur du raisonnement.',
+  seconde: 'NIVEAU : Seconde (environ 15 ans). Entrée au lycée. Vocabulaire technique précis. Encourage l\'autonomie et la réflexion critique.',
+  premiere: 'NIVEAU : Première (environ 16 ans). Préparation du bac de français et spécialités. Exigence élevée. Vocabulaire riche et technique. Développe l\'argumentation.',
+  terminale: 'NIVEAU : Terminale (environ 17 ans). Dernière année avant le bac. Exigence maximale. Raisonnements approfondis, esprit critique, préparation aux études supérieures.'
 };
 
-const BASE_PROMPT = `Tu es un assistant pédagogique intégré dans une liseuse éducative pour élèves français.
-
-MÉTHODE SOCRATIQUE (obligatoire) :
-- Tu ne donnes JAMAIS la réponse directement.
-- Tu poses d'abord une question pour comprendre ce que l'élève sait déjà.
-- Tu le guides étape par étape en l'accompagnant.
-- Si besoins tu peux l'ammener a des rappels de leçons adaptées au niveau de l'élève.
-
-MATIÈRES : Toutes les matières scolaires (Maths, Français, Histoire-Géo, Physique-Chimie, SVT, Philosophie, NSI, SES, langues, etc.)
-
-STYLE :
-- Tu es concis. Réponses courtes et claires, pas de pavés.
-- Tu utilises du **gras** pour les mots et concepts importants.
-- Tu utilises des emojis avec parcimonie (1-2 max par message).
-- Tu tutoies l'élève. Tu es bienveillant et encourageant tout en étant exigeant.
-- Tu adapte le vocaulaire en fonction du niveau de l'élève tout en vulgarisant les concepts complexes si besoins.
-
-LIMITES :
-- Tu refuses poliment les sujets hors programme scolaire.
-- Tu ne fais JAMAIS les devoirs à la place de l'élève même si celui-ci te le demande de façon institante.
-- Si l'élève insiste pour la réponse, tu expliques pourquoi comprendre par soi-même est plus important.`;
+const BASE_PROMPT = 'Tu es un assistant pédagogique intégré dans une liseuse éducative pour élèves français.\n\nMÉTHODE SOCRATIQUE (obligatoire) :\n- Tu ne donnes JAMAIS la réponse directement.\n- Tu poses d\'abord une question pour comprendre ce que l\'élève sait déjà.\n- Tu le guides étape par étape en l\'accompagnant.\n\nMATIÈRES : Toutes les matières scolaires (Maths, Français, Histoire-Géo, Physique-Chimie, SVT, Philosophie, NSI, SES, langues, etc.)\n\nSTYLE :\n- Tu es concis. Réponses courtes et claires, pas de pavés.\n- Tu utilises du **gras** pour les concepts importants.\n- Tu utilises des emojis avec parcimonie (1-2 max par message).\n- Tu tutoies l\'élève. Tu es bienveillant et encourageant tout en étant exigeant.\n\nLIMITES :\n- Tu refuses poliment les sujets hors programme scolaire.\n- Tu ne fais JAMAIS les devoirs à la place de l\'élève.\n- Si l\'élève insiste pour la réponse, tu expliques pourquoi comprendre par soi-même est plus important.';
 
 function getSystemPrompt() {
-  const classPrompt = currentClass ? CLASS_PROMPTS[currentClass] : 'NIVEAU : Non spécifié. Adapte-toi au langage de l\'élève.';
+  var classPrompt = currentClass ? CLASS_PROMPTS[currentClass] : 'NIVEAU : Non spécifié.';
   return BASE_PROMPT + '\n\n' + classPrompt;
 }
 
-// Level modal - Step 1
 function openLevelModal() {
   document.getElementById('step1').style.display = 'block';
   document.getElementById('step2').style.display = 'none';
@@ -524,25 +475,18 @@ function closeLevelModal(e) {
   }
 }
 
-// Level modal - Step 2
 function showStep2(cycle) {
-  const data = CLASSES[cycle];
+  var data = CLASSES[cycle];
   document.getElementById('step1').style.display = 'none';
   document.getElementById('step2').style.display = 'block';
   document.getElementById('step2Title').textContent = data.title;
-
-  const container = document.getElementById('classOptions');
+  var container = document.getElementById('classOptions');
   container.innerHTML = '';
-
-  data.options.forEach(opt => {
-    const btn = document.createElement('button');
+  data.options.forEach(function(opt) {
+    var btn = document.createElement('button');
     btn.className = 'class-option';
-    btn.innerHTML = `
-      <div class="class-dot" style="background:${data.color}"></div>
-      ${opt.label}
-      <span style="margin-left:auto;font-size:11px;color:#666">${opt.age}</span>
-    `;
-    btn.onclick = () => selectClass(opt.id, opt.label, data.title);
+    btn.innerHTML = '<div class="class-dot" style="background:' + data.color + '"></div>' + opt.label + '<span style="margin-left:auto;font-size:11px;color:#666">' + opt.age + '</span>';
+    btn.onclick = function() { selectClass(opt.id, opt.label, data.title); };
     container.appendChild(btn);
   });
 }
@@ -554,10 +498,9 @@ function backToStep1() {
 
 function selectClass(classId, classLabel, cycleTitle) {
   currentClass = classId;
-  document.getElementById('levelLabel').textContent = `${cycleTitle.split(' ')[0]} ${classLabel}`;
+  document.getElementById('levelLabel').textContent = cycleTitle.split(' ')[0] + ' ' + classLabel;
   history = [];
-
-  setTimeout(() => {
+  setTimeout(function() {
     document.getElementById('levelOverlay').classList.remove('open');
   }, 150);
 }
@@ -572,15 +515,14 @@ function autoResize(el) {
 }
 
 async function ask() {
-  const input = document.getElementById('input');
-  const chat = document.getElementById('chat');
-  const btn = document.getElementById('sendBtn');
-  const question = input.value.trim();
+  var input = document.getElementById('input');
+  var chat = document.getElementById('chat');
+  var btn = document.getElementById('sendBtn');
+  var question = input.value.trim();
   if (!question) return;
-
   if (!currentClass) { openLevelModal(); return; }
 
-  const welcome = document.getElementById('welcome');
+  var welcome = document.getElementById('welcome');
   if (welcome) welcome.remove();
 
   addMessage(question, 'user');
@@ -588,26 +530,23 @@ async function ask() {
   input.style.height = 'auto';
   btn.disabled = true;
 
-  const typingId = 't' + Date.now();
-  const typingRow = document.createElement('div');
+  var typingId = 't' + Date.now();
+  var typingRow = document.createElement('div');
   typingRow.className = 'msg-row ai';
   typingRow.id = typingId;
-  typingRow.innerHTML = `
-    <div class="msg-avatar"><svg width="20" height="20"><use href="#appLogo"/></svg></div>
-    <div class="bubble"><div class="typing-indicator"><span></span><span></span><span></span></div></div>
-  `;
+  typingRow.innerHTML = '<div class="msg-avatar"><svg width="20" height="20"><use href="#appLogo"/></svg></div><div class="bubble"><div class="typing-indicator"><span></span><span></span><span></span></div></div>';
   chat.appendChild(typingRow);
   chat.scrollTop = chat.scrollHeight;
 
   history.push({ role: 'user', parts: [{ text: question }] });
 
-  const models = ['gemini-2.5-flash-preview-04-17','gemini-2.5-flash','gemini-2.5-flash-lite'];
-  let success = false;
+  var models = ['gemini-2.5-flash', 'gemini-2.5-flash-lite'];
+  var success = false;
 
-  for (const model of models) {
+  for (var i = 0; i < models.length; i++) {
     try {
-      const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${API_KEY}`,
+      var res = await fetch(
+        'https://generativelanguage.googleapis.com/v1beta/models/' + models[i] + ':generateContent?key=' + API_KEY,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -617,12 +556,12 @@ async function ask() {
           })
         }
       );
-      const data = await res.json();
-      if (data?.error) { continue; }
-      const answer = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      var data = await res.json();
+      if (data && data.error) { continue; }
+      var answer = data && data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0] && data.candidates[0].content.parts[0].text;
       if (!answer) { continue; }
       history.push({ role: 'model', parts: [{ text: answer }] });
-      const typing = document.getElementById(typingId);
+      var typing = document.getElementById(typingId);
       if (typing) typing.querySelector('.bubble').innerHTML = formatText(answer);
       success = true;
       break;
@@ -631,8 +570,8 @@ async function ask() {
 
   if (!success) {
     history.pop();
-    const typing = document.getElementById(typingId);
-    if (typing) typing.querySelector('.bubble').innerHTML = '<span style="color:#ef4444">Erreur de connexion. Vérifie ton internet.</span>';
+    var typing2 = document.getElementById(typingId);
+    if (typing2) typing2.querySelector('.bubble').innerHTML = '<span style="color:#ef4444">Erreur de connexion. Vérifie ton internet et ta clé API.</span>';
   }
 
   btn.disabled = false;
@@ -641,19 +580,19 @@ async function ask() {
 }
 
 function addMessage(text, type) {
-  const chat = document.getElementById('chat');
-  const row = document.createElement('div');
-  row.className = `msg-row ${type}`;
+  var chat = document.getElementById('chat');
+  var row = document.createElement('div');
+  row.className = 'msg-row ' + type;
   if (type === 'user') {
-    row.innerHTML = `<div class="msg-avatar">👤</div><div class="bubble">${escapeHtml(text)}</div>`;
+    row.innerHTML = '<div class="msg-avatar">👤</div><div class="bubble">' + escapeHtml(text) + '</div>';
   } else {
-    row.innerHTML = `<div class="msg-avatar"><svg width="20" height="20"><use href="#appLogo"/></svg></div><div class="bubble">${formatText(text)}</div>`;
+    row.innerHTML = '<div class="msg-avatar"><svg width="20" height="20"><use href="#appLogo"/></svg></div><div class="bubble">' + formatText(text) + '</div>';
   }
   chat.appendChild(row);
   chat.scrollTop = chat.scrollHeight;
 }
 
-function escapeHtml(t) { const d=document.createElement('div'); d.textContent=t; return d.innerHTML; }
+function escapeHtml(t) { var d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
 
 function formatText(t) {
   return t
