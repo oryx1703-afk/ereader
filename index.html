@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+<title>E-Reader IA</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background:#0a0a0a;
+    color:#fff;
+    font-family:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height:100vh;
+    min-height:100dvh;
+    display:flex;
+    flex-direction:column;
+  }
+
+  .header {
+    padding:16px 20px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    border-bottom:1px solid #1a1a1a;
+    background:#0a0a0a;
+    flex-shrink:0;
+  }
+  .header-avatar {
+    width:38px; height:38px;
+    border-radius:12px;
+    background:linear-gradient(135deg, #6366f1, #8b5cf6);
+    display:flex; align-items:center; justify-content:center;
+    font-size:18px;
+    flex-shrink:0;
+  }
+  .header-info h1 { font-size:15px; font-weight:600; color:#f0f0f0; }
+  .header-info p { font-size:11px; color:#666; margin-top:1px; }
+  .status-dot {
+    width:7px; height:7px;
+    background:#22c55e;
+    border-radius:50%;
+    display:inline-block;
+    margin-right:4px;
+    vertical-align:middle;
+  }
+
+  .chat-area {
+    flex:1;
+    overflow-y:auto;
+    padding:20px 16px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+    scroll-behavior:smooth;
+  }
+
+  .msg-row {
+    display:flex;
+    gap:10px;
+    max-width:92%;
+    animation: msgSlide 0.35s ease;
+  }
+  .msg-row.user { align-self:flex-end; flex-direction:row-reverse; }
+  .msg-row.ai { align-self:flex-start; }
+
+  @keyframes msgSlide {
+    from { opacity:0; transform:translateY(10px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+
+  .msg-avatar {
+    width:30px; height:30px;
+    border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:14px;
+    flex-shrink:0;
+    margin-top:2px;
+  }
+  .msg-row.ai .msg-avatar { background:linear-gradient(135deg, #6366f1, #8b5cf6); }
+  .msg-row.user .msg-avatar { background:#333; }
+
+  .bubble {
+    padding:12px 16px;
+    border-radius:18px;
+    font-size:14.5px;
+    line-height:1.65;
+    word-wrap:break-word;
+  }
+  .msg-row.ai .bubble {
+    background:#161616;
+    border:1px solid #222;
+    border-top-left-radius:6px;
+    color:#e0e0e0;
+  }
+  .msg-row.user .bubble {
+    background:#6366f1;
+    border-top-right-radius:6px;
+    color:#fff;
+  }
+
+  .bubble strong { color:#a5b4fc; font-weight:600; }
+  .bubble code {
+    background:#222;
+    padding:2px 6px;
+    border-radius:4px;
+    font-size:13px;
+    font-family:'SF Mono', 'Fira Code', monospace;
+  }
+  .bubble ul, .bubble ol { margin:8px 0 8px 18px; }
+  .bubble li { margin-bottom:4px; }
+
+  .typing-indicator {
+    display:flex;
+    gap:4px;
+    padding:14px 18px;
+  }
+  .typing-indicator span {
+    width:7px; height:7px;
+    background:#555;
+    border-radius:50%;
+    animation: typing 1.4s ease-in-out infinite;
+  }
+  .typing-indicator span:nth-child(2) { animation-delay:0.2s; }
+  .typing-indicator span:nth-child(3) { animation-delay:0.4s; }
+  @keyframes typing {
+    0%,60%,100% { transform:translateY(0); opacity:0.4; }
+    30% { transform:translateY(-6px); opacity:1; }
+  }
+
+  .welcome {
+    text-align:center;
+    padding:40px 30px;
+    animation: fadeIn 0.6s ease;
+  }
+  .welcome-icon {
+    width:56px; height:56px;
+    border-radius:16px;
+    background:linear-gradient(135deg, #6366f1, #8b5cf6);
+    display:flex; align-items:center; justify-content:center;
+    font-size:26px;
+    margin:0 auto 16px;
+  }
+  .welcome h2 { font-size:18px; font-weight:600; margin-bottom:6px; color:#f0f0f0; }
+  .welcome p { font-size:13px; color:#666; line-height:1.5; max-width:280px; margin:0 auto; }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+  .suggestions {
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    justify-content:center;
+    margin-top:20px;
+  }
+  .chip {
+    padding:8px 16px;
+    background:#161616;
+    border:1px solid #2a2a2a;
+    border-radius:20px;
+    font-size:13px;
+    color:#aaa;
+    cursor:pointer;
+    transition:all 0.2s;
+    font-family:inherit;
+  }
+  .chip:active { background:#222; border-color:#6366f1; color:#fff; }
+
+  .input-bar {
+    padding:12px 16px;
+    padding-bottom:max(12px, env(safe-area-inset-bottom));
+    display:flex;
+    gap:8px;
+    align-items:flex-end;
+    border-top:1px solid #1a1a1a;
+    background:#0a0a0a;
+    flex-shrink:0;
+  }
+  .input-wrapper {
+    flex:1;
+    background:#161616;
+    border:1px solid #2a2a2a;
+    border-radius:22px;
+    display:flex;
+    align-items:flex-end;
+    transition:border-color 0.2s;
+    padding:4px;
+  }
+  .input-wrapper:focus-within { border-color:#6366f1; }
+  .input-field {
+    flex:1;
+    padding:10px 14px;
+    background:transparent;
+    border:none;
+    color:#fff;
+    font-size:15px;
+    outline:none;
+    font-family:inherit;
+    resize:none;
+    max-height:100px;
+    line-height:1.4;
+  }
+  .input-field::placeholder { color:#555; }
+  .send-btn {
+    width:40px; height:40px;
+    border-radius:50%;
+    background:#6366f1;
+    border:none;
+    color:#fff;
+    font-size:18px;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    transition:all 0.2s;
+    flex-shrink:0;
+  }
+  .send-btn:active { transform:scale(0.9); }
+  .send-btn:disabled { opacity:0.3; }
+  .send-btn svg {
+    width:18px; height:18px;
+    fill:none;
+    stroke:currentColor;
+    stroke-width:2.5;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-avatar">🧠</div>
+  <div class="header-info">
+    <h1>Assistant Socratique</h1>
+    <p><span class="status-dot"></span>En ligne</p>
+  </div>
+</div>
+
+<div class="chat-area" id="chat">
+  <div class="welcome" id="welcome">
+    <div class="welcome-icon">📖</div>
+    <h2>E-Reader IA</h2>
+    <p>Pose une question sur tes cours. Je te guiderai par la méthode socratique pour t'aider à comprendre par toi-même.</p>
+    <div class="suggestions">
+      <button class="chip" onclick="sendChip(this)">⚛️ Physique-Chimie</button>
+      <button class="chip" onclick="sendChip(this)">🧬 SVT</button>
+      <button class="chip" onclick="sendChip(this)">📐 Maths</button>
+      <button class="chip" onclick="sendChip(this)">🌍 Histoire-Géo</button>
+      <button class="chip" onclick="sendChip(this)">📝 Aide aux devoirs</button>
+    </div>
+  </div>
+</div>
+
+<div class="input-bar">
+  <div class="input-wrapper">
+    <textarea class="input-field" id="input" placeholder="Demander quelque chose..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+  </div>
+  <button class="send-btn" id="sendBtn" onclick="ask()">
+    <svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg>
+  </button>
+</div>
+
+<script>
+const API_KEY = 'AIzaSyChJE-a1DWu4st-9offPDT9ySQ0jZOdUew';
+const MODEL = 'gemini-2.5-flash-preview-04-17';
+
+const SYSTEM_PROMPT = `Tu es un assistant pédagogique IA intégré dans un e-reader éducatif innovant. 
+Tu utilises la méthode socratique : plutôt que donner les réponses directement, tu guides l'élève par des questions pour l'amener à comprendre par lui-même.
+Tu es bienveillant, encourageant, et tu t'adresses à des lycéens français (niveau Seconde à Terminale).
+Tu couvres toutes les matières : Physique-Chimie, SVT, Maths, Histoire-Géo, Français, Philosophie, etc.
+Sois concis et clair. Structure tes réponses avec du gras (**mot**) pour les concepts importants.
+Utilise des emojis avec parcimonie pour rendre la conversation vivante.
+Quand l'élève te pose une question, commence par lui poser une question en retour pour évaluer ce qu'il sait déjà.`;
+
+let history = [];
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); ask(); }
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 100) + 'px';
+}
+
+function sendChip(el) {
+  document.getElementById('input').value = `J'ai besoin d'aide en ${el.textContent.trim()}`;
+  ask();
+}
+
+async function ask() {
+  const input = document.getElementById('input');
+  const chat = document.getElementById('chat');
+  const btn = document.getElementById('sendBtn');
+  const question = input.value.trim();
+  if (!question) return;
+
+  const welcome = document.getElementById('welcome');
+  if (welcome) welcome.remove();
+
+  addMessage(question, 'user');
+  input.value = '';
+  input.style.height = 'auto';
+  btn.disabled = true;
+
+  const typingId = 't' + Date.now();
+  const typingRow = document.createElement('div');
+  typingRow.className = 'msg-row ai';
+  typingRow.id = typingId;
+  typingRow.innerHTML = `
+    <div class="msg-avatar">🧠</div>
+    <div class="bubble">
+      <div class="typing-indicator"><span></span><span></span><span></span></div>
+    </div>
+  `;
+  chat.appendChild(typingRow);
+  chat.scrollTop = chat.scrollHeight;
+
+  history.push({ role: 'user', parts: [{ text: question }] });
+
+  // Liste de modèles à essayer dans l'ordre
+  const models = [
+    'gemini-2.5-flash-preview-04-17',
+    'gemini-2.5-flash',
+    'gemini-2.5-flash-lite',
+    'gemini-2.0-flash'
+  ];
+
+  let success = false;
+
+  for (const model of models) {
+    try {
+      const res = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${API_KEY}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+            contents: history
+          })
+        }
+      );
+
+      const data = await res.json();
+
+      if (data?.error) {
+        console.log(`${model} erreur:`, data.error.message);
+        continue;
+      }
+
+      const answer = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!answer) {
+        console.log(`${model} pas de réponse`);
+        continue;
+      }
+
+      history.push({ role: 'model', parts: [{ text: answer }] });
+      const typing = document.getElementById(typingId);
+      if (typing) typing.querySelector('.bubble').innerHTML = formatText(answer);
+      console.log('Modèle utilisé:', model);
+      success = true;
+      break;
+
+    } catch (e) {
+      console.log(`${model} fetch erreur:`, e.message);
+      continue;
+    }
+  }
+
+  if (!success) {
+    history.pop();
+    const typing = document.getElementById(typingId);
+    if (typing) {
+      typing.querySelector('.bubble').innerHTML = '<span style="color:#ef4444">Aucun modèle disponible. Vérifie ta connexion internet et ta clé API.</span>';
+    }
+  }
+
+  btn.disabled = false;
+  chat.scrollTop = chat.scrollHeight;
+  input.focus();
+}
+
+function addMessage(text, type) {
+  const chat = document.getElementById('chat');
+  const row = document.createElement('div');
+  row.className = `msg-row ${type}`;
+  const avatar = type === 'user' ? '👤' : '🧠';
+  const content = type === 'user' ? escapeHtml(text) : formatText(text);
+  row.innerHTML = `
+    <div class="msg-avatar">${avatar}</div>
+    <div class="bubble">${content}</div>
+  `;
+  chat.appendChild(row);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function escapeHtml(t) {
+  const d = document.createElement('div');
+  d.textContent = t;
+  return d.innerHTML;
+}
+
+function formatText(t) {
+  return t
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/`(.*?)`/g, '<code>$1</code>')
+    .replace(/^\* (.+)/gm, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>')
+    .replace(/\n/g, '<br>');
+}
+</script>
+</body>
+</html>
