@@ -671,7 +671,48 @@ async function handlePhoto(input) {
   reader.readAsDataURL(file);
   input.value = '';
 }
-function escapeHtml(t) { var d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+async function handlePhoto(input) {
+  if (!input.files || !input.files[0]) return;
+  if (!currentClass) { openLevelModal(); return; }
+  var file = input.files[0];
+  var reader = new FileReader();
+  reader.onload = async function(e) {
+    var base64 = e.target.result.split(',')[1];
+    var mimeType = file.type;
+    var welcome = document.getElementById('welcome');
+    if (welcome) welcome.remove();
+    addMessage('📷 Photo envoyée', 'user');
+    var typingId = 't' + Date.now();
+    var typingRow = document.createElement('div');
+    typingRow.className = 'msg-row ai';
+    typingRow.id = typingId;
+    typingRow.innerHTML = '<div class="msg-avatar"><svg width="20" height="20"><use href="#appLogo"/></svg></div><div class="bubble"><div class="typing-indicator"><span></span><span></span><span></span></div></div>';
+    document.getElementById('chat').appendChild(typingRow);
+    document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
+    var contents = [{ role: 'user', parts: [{ inline_data: { mime_type: mimeType, data: base64 } }, { text: 'Voici une photo d\'un exercice ou d\'un cours. Analyse-le et aide l\'élève en utilisant la méthode socratique. Ne donne pas la réponse directement.' }] }];
+    var models = ['gemini-2.5-flash', 'gemini-2.5-flash-lite'];
+    var success = false;
+    for (var i = 0; i < models.length; i++) {
+      try {
+        var res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + models[i] + ':generateContent?key=' + API_KEY, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ system_instruction: { parts: [{ text: getSystemPrompt() }] }, contents: contents }) });
+        var data = await res.json();
+        if (data && data.error) { continue; }
+        var answer = data && data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0] && data.candidates[0].content.parts[0].text;
+        if (!answer) { continue; }
+        history = contents.concat([{ role: 'model', parts: [{ text: answer }] }]);
+        var typing = document.getElementById(typingId);
+        if (typing) typing.querySelector('.bubble').innerHTML = formatText(answer);
+        success = true;
+        break;
+      } catch (e) { continue; }
+    }
+    if (!success) { var typing2 = document.getElementById(typingId); if (typing2) typing2.querySelector('.bubble').innerHTML = '<span style="color:#ef4444">Erreur. Vérifie ton internet ou ta clé API.</span>'; }
+    document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
+  };
+  reader.readAsDataURL(file);
+  input.value = '';
+}
+ function escapeHtml(t) { var d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
 
 function formatText(t) {
   return t
