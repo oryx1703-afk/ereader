@@ -553,7 +553,7 @@ async function ask() {
 
   history.push({ role: 'user', parts: [{ text: question }] });
 
-  var models = ['gemini-2.5-flash', 'gemini-2.5-flash-lite'];
+  var models = ['gemini-2.5-flash-lite'];
   var success = false;
 
   for (var i = 0; i < models.length; i++) {
@@ -634,7 +634,7 @@ async function handlePhoto(input) {
       ]
     }];
 
-    var models = ['gemini-2.5-flash', 'gemini-2.5-flash-lite'];
+    var models = ['gemini-2.5-flash-lite'];
     var success = false;
 
     for (var i = 0; i < models.length; i++) {
@@ -690,7 +690,7 @@ async function handlePhoto(input) {
     document.getElementById('chat').appendChild(typingRow);
     document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
     var contents = [{ role: 'user', parts: [{ inline_data: { mime_type: mimeType, data: base64 } }, { text: 'Voici une photo d\'un exercice ou d\'un cours. Analyse-le et aide l\'élève en utilisant la méthode socratique. Ne donne pas la réponse directement.' }] }];
-    var models = ['gemini-2.5-flash', 'gemini-2.5-flash-lite'];
+    var models = ['gemini-2.5-flash-lite'];
     var success = false;
     for (var i = 0; i < models.length; i++) {
       try {
