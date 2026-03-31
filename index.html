@@ -9,8 +9,8 @@
   * { margin:0; padding:0; box-sizing:border-box; }
 
   html, body {
-    background:#0a0a0a;
-    color:#fff;
+    background:#1c1a17;
+    color:#f0e8dc;
     font-family:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     min-height:100vh;
     min-height:100dvh;
@@ -24,7 +24,7 @@
   /* ===== LANDING PAGE ===== */
   .landing {
     position:fixed; inset:0; z-index:300;
-    background:#0a0a0a;
+    background:#1c1a17;
     display:flex; flex-direction:column;
     align-items:center; justify-content:center;
     padding:30px;
@@ -46,7 +46,7 @@
   .landing h1 {
     font-family:'Outfit',sans-serif;
     font-size:30px; font-weight:800;
-    color:#fff; letter-spacing:1px;
+    color:#f0e8dc; letter-spacing:1px;
     margin-bottom:6px;
     text-align:center;
   }
@@ -78,7 +78,7 @@
     padding:16px;
     background:linear-gradient(135deg, #6366f1, #8b5cf6);
     border:none; border-radius:16px;
-    color:#fff; font-size:16px; font-weight:700;
+    color:#f0e8dc; font-size:16px; font-weight:700;
     cursor:pointer; font-family:'Outfit',sans-serif;
     letter-spacing:1px;
     transition:all 0.25s;
@@ -109,7 +109,7 @@
   }
   .api-modal.open { display:flex; }
   .api-modal-box {
-    background:#161616; border:1px solid #2a2a2a;
+    background:#252219; border:1px solid #3a3530;
     border-radius:20px; padding:24px;
     width:85%; max-width:340px;
   }
@@ -124,7 +124,7 @@
     padding:14px 20px;
     display:flex; align-items:center; gap:12px;
     border-bottom:1px solid #1a1a1a;
-    background:#0a0a0a; flex-shrink:0;
+    background:#1c1a17; flex-shrink:0;
   }
   .header-logo { width:36px; height:36px; flex-shrink:0; }
   .header-info h1 { font-size:15px; font-weight:600; color:#f0f0f0; font-family:'Outfit',sans-serif; letter-spacing:0.5px; }
@@ -137,7 +137,7 @@
 
   .level-btn {
     margin-left:auto; padding:6px 14px;
-    background:#161616; border:1px solid #2a2a2a;
+    background:#252219; border:1px solid #3a3530;
     border-radius:20px; color:#a5b4fc;
     font-size:12px; font-weight:500;
     cursor:pointer; font-family:inherit;
@@ -153,7 +153,7 @@
   }
   .level-overlay.open { display:flex; }
   .level-modal {
-    background:#161616; border:1px solid #2a2a2a;
+    background:#252219; border:1px solid #3a3530;
     border-radius:20px; padding:24px;
     width:85%; max-width:340px;
     animation:modalSlide 0.3s ease;
@@ -171,12 +171,12 @@
     margin-bottom:14px; padding:4px 0;
     border:none; background:none; font-family:inherit;
   }
-  .modal-back:active { color:#fff; }
+  .modal-back:active { color:#f0e8dc; }
 
   .level-option {
     display:flex; align-items:center; gap:12px;
-    padding:14px 16px; background:#1e1e1e;
-    border:1px solid #2a2a2a; border-radius:14px;
+    padding:14px 16px; background:#2a2620;
+    border:1px solid #3a3530; border-radius:14px;
     margin-bottom:8px; cursor:pointer;
     font-family:inherit; width:100%; text-align:left; color:#ddd;
   }
@@ -192,8 +192,8 @@
 
   .class-option {
     display:flex; align-items:center; gap:10px;
-    padding:12px 16px; background:#1e1e1e;
-    border:1px solid #2a2a2a; border-radius:12px;
+    padding:12px 16px; background:#2a2620;
+    border:1px solid #3a3530; border-radius:12px;
     margin-bottom:6px; cursor:pointer;
     font-family:inherit; width:100%; text-align:left;
     color:#ddd; font-size:14px; font-weight:500;
@@ -229,8 +229,8 @@
     padding:12px 16px; border-radius:18px;
     font-size:14.5px; line-height:1.65; word-wrap:break-word;
   }
-  .msg-row.ai .bubble { background:#161616; border:1px solid #222; border-top-left-radius:6px; color:#e0e0e0; }
-  .msg-row.user .bubble { background:#6366f1; border-top-right-radius:6px; color:#fff; }
+  .msg-row.ai .bubble { background:#252219; border:1px solid #3a3530; border-top-left-radius:6px; color:#d8d0c4; }
+  .msg-row.user .bubble { background:#6366f1; border-top-right-radius:6px; color:#f0e8dc; }
   .bubble strong { color:#a5b4fc; font-weight:600; }
   .bubble code { background:#222; padding:2px 6px; border-radius:4px; font-size:13px; }
   .bubble ul, .bubble ol { margin:8px 0 8px 18px; }
@@ -245,23 +245,23 @@
   .input-bar {
     padding:12px 16px; padding-bottom:max(12px, env(safe-area-inset-bottom));
     display:flex; gap:8px; align-items:flex-end;
-    border-top:1px solid #1a1a1a; background:#0a0a0a; flex-shrink:0;
+    border-top:1px solid #1a1a1a; background:#1c1a17; flex-shrink:0;
   }
   .input-wrapper {
-    flex:1; background:#161616; border:1px solid #2a2a2a;
+    flex:1; background:#252219; border:1px solid #3a3530;
     border-radius:22px; display:flex; align-items:flex-end;
     transition:border-color 0.2s; padding:4px;
   }
   .input-wrapper:focus-within { border-color:#6366f1; }
   .input-field {
     flex:1; padding:10px 14px; background:transparent; border:none;
-    color:#fff; font-size:15px; outline:none; font-family:inherit;
+    color:#f0e8dc; font-size:15px; outline:none; font-family:inherit;
     resize:none; max-height:100px; line-height:1.4;
   }
   .input-field::placeholder { color:#555; }
   .send-btn {
     width:40px; height:40px; border-radius:50%; background:#6366f1;
-    border:none; color:#fff; display:flex; align-items:center;
+    border:none; color:#f0e8dc; display:flex; align-items:center;
     justify-content:center; cursor:pointer; flex-shrink:0;
   }
   .send-btn:active { transform:scale(0.9); }
@@ -281,7 +281,7 @@
     </linearGradient>
   </defs>
   <symbol id="appLogo" viewBox="0 0 120 120">
-    <circle cx="60" cy="60" r="56" fill="#161616" stroke="url(#logoGrad1)" stroke-width="2"/>
+    <circle cx="60" cy="60" r="56" fill="#252219" stroke="url(#logoGrad1)" stroke-width="2"/>
     <ellipse cx="60" cy="60" rx="30" ry="30" fill="none" stroke="url(#logoGrad2)" stroke-width="1" opacity="0.25"/>
     <ellipse cx="60" cy="60" rx="15" ry="30" fill="none" stroke="url(#logoGrad2)" stroke-width="1" opacity="0.2"/>
     <line x1="30" y1="60" x2="90" y2="60" stroke="url(#logoGrad2)" stroke-width="1" opacity="0.2"/>
@@ -326,8 +326,8 @@
   <div class="api-modal-box">
     <h3 style="color:#f0f0f0">🔑 Configuration</h3>
     <p>Entre la clé API Gemini pour activer Gemo.</p>
-    <input id="apiKeyInput" placeholder="Clé API..." type="password" style="width:100%;padding:12px 16px;background:#1e1e1e;border:1px solid #2a2a2a;border-radius:12px;color:#fff;font-size:14px;font-family:inherit;outline:none;margin-bottom:10px">
-    <button onclick="saveApiKey()" style="width:100%;padding:12px;background:#6366f1;border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">Sauvegarder</button>
+    <input id="apiKeyInput" placeholder="Clé API..." type="password" style="width:100%;padding:12px 16px;background:#2a2620;border:1px solid #3a3530;border-radius:12px;color:#f0e8dc;font-size:14px;font-family:inherit;outline:none;margin-bottom:10px">
+    <button onclick="saveApiKey()" style="width:100%;padding:12px;background:#6366f1;border:none;border-radius:12px;color:#f0e8dc;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">Sauvegarder</button>
     <button onclick="document.getElementById('apiModal').classList.remove('open')" style="width:100%;padding:10px;background:none;border:none;color:#666;font-size:12px;cursor:pointer;font-family:inherit;margin-top:6px">Annuler</button>
   </div>
 </div>
@@ -383,7 +383,7 @@
 
   <div class="input-bar">
     <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none" onchange="handlePhoto(this)">
-    <button onclick="document.getElementById('cameraInput').click()" style="width:40px;height:40px;border-radius:50%;background:#161616;border:1px solid #2a2a2a;color:#a5b4fc;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0">📷</button>
+    <button onclick="document.getElementById('cameraInput').click()" style="width:40px;height:40px;border-radius:50%;background:#252219;border:1px solid #3a3530;color:#a5b4fc;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0">📷</button>
     <div class="input-wrapper">
       <textarea class="input-field" id="input" placeholder="Demander à Gemo..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
     </div>
