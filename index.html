@@ -4,90 +4,165 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
 <title>E-School Liseuse</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
 
- body {
+  html, body {
     background:#0a0a0a;
     color:#fff;
     font-family:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     min-height:100vh;
     min-height:100dvh;
+    overflow:hidden;
+  }
+  body {
     display:flex;
     flex-direction:column;
   }
 
+  /* ===== LANDING PAGE ===== */
+  .landing {
+    position:fixed; inset:0; z-index:300;
+    background:#0a0a0a;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    padding:30px;
+    overflow:hidden;
+  }
+  .landing.hidden { display:none; }
+
+  .landing-logo {
+    width:90px; height:90px;
+    margin-bottom:24px;
+    animation: logoFloat 4s ease-in-out infinite;
+    cursor:pointer;
+  }
+  @keyframes logoFloat {
+    0%,100% { transform:translateY(0); filter:drop-shadow(0 0 10px rgba(99,102,241,0.3)); }
+    50% { transform:translateY(-8px); filter:drop-shadow(0 0 25px rgba(99,102,241,0.5)); }
+  }
+
+  .landing h1 {
+    font-family:'Outfit',sans-serif;
+    font-size:30px; font-weight:800;
+    color:#fff; letter-spacing:1px;
+    margin-bottom:6px;
+    text-align:center;
+  }
+
+  .shimmer-text {
+    font-size:13px; font-weight:600;
+    letter-spacing:3px; text-transform:uppercase;
+    background: linear-gradient(90deg, #6366f1, #ec4899, #f59e0b, #22c55e, #3b82f6, #8b5cf6, #6366f1);
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 3s linear infinite;
+    margin-bottom:28px;
+  }
+  @keyframes shimmer {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 300% 50%; }
+  }
+
+  .landing-desc {
+    font-size:13px; color:#888;
+    text-align:center; max-width:320px;
+    line-height:1.7; margin-bottom:36px;
+  }
+
+  .landing-btn {
+    width:100%; max-width:300px;
+    padding:16px;
+    background:linear-gradient(135deg, #6366f1, #8b5cf6);
+    border:none; border-radius:16px;
+    color:#fff; font-size:16px; font-weight:700;
+    cursor:pointer; font-family:'Outfit',sans-serif;
+    letter-spacing:1px;
+    transition:all 0.25s;
+    box-shadow:0 4px 20px rgba(99,102,241,0.3);
+  }
+  .landing-btn:active { transform:scale(0.97); box-shadow:0 2px 10px rgba(99,102,241,0.2); }
+
+  /* Particules décoratives */
+  .particle {
+    position:absolute;
+    width:4px; height:4px;
+    border-radius:50%;
+    background:#6366f1;
+    opacity:0.15;
+    animation: particleFloat 6s ease-in-out infinite;
+  }
+  @keyframes particleFloat {
+    0%,100% { transform:translateY(0) translateX(0); opacity:0.1; }
+    50% { transform:translateY(-30px) translateX(10px); opacity:0.25; }
+  }
+
+  /* ===== HIDDEN API KEY MODAL ===== */
+  .api-modal {
+    position:fixed; inset:0; z-index:400;
+    background:rgba(0,0,0,0.85);
+    display:none; align-items:center; justify-content:center;
+    padding:30px;
+  }
+  .api-modal.open { display:flex; }
+  .api-modal-box {
+    background:#161616; border:1px solid #2a2a2a;
+    border-radius:20px; padding:24px;
+    width:85%; max-width:340px;
+  }
+  .api-modal-box h3 { font-family:'Outfit',sans-serif; font-size:16px; margin-bottom:6px; color:#f0f0f0; }
+  .api-modal-box p { font-size:12px; color:#666; margin-bottom:16px; }
+
+  /* ===== MAIN APP ===== */
+  .app { display:none; flex-direction:column; flex:1; min-height:100vh; min-height:100dvh; }
+  .app.visible { display:flex; }
+
   .header {
     padding:14px 20px;
-    display:flex;
-    align-items:center;
-    gap:12px;
+    display:flex; align-items:center; gap:12px;
     border-bottom:1px solid #1a1a1a;
-    background:#0a0a0a;
-    flex-shrink:0;
+    background:#0a0a0a; flex-shrink:0;
   }
   .header-logo { width:36px; height:36px; flex-shrink:0; }
   .header-info h1 { font-size:15px; font-weight:600; color:#f0f0f0; font-family:'Outfit',sans-serif; letter-spacing:0.5px; }
   .header-info p { font-size:11px; color:#666; margin-top:1px; }
   .status-dot {
-    width:7px; height:7px;
-    background:#22c55e;
-    border-radius:50%;
-    display:inline-block;
-    margin-right:4px;
-    vertical-align:middle;
+    width:7px; height:7px; background:#22c55e;
+    border-radius:50%; display:inline-block;
+    margin-right:4px; vertical-align:middle;
   }
 
   .level-btn {
-    margin-left:auto;
-    padding:6px 14px;
-    background:#161616;
-    border:1px solid #2a2a2a;
-    border-radius:20px;
-    color:#a5b4fc;
-    font-size:12px;
-    font-weight:500;
-    cursor:pointer;
-    font-family:inherit;
-    transition:all 0.2s;
-    display:flex;
-    align-items:center;
-    gap:6px;
+    margin-left:auto; padding:6px 14px;
+    background:#161616; border:1px solid #2a2a2a;
+    border-radius:20px; color:#a5b4fc;
+    font-size:12px; font-weight:500;
+    cursor:pointer; font-family:inherit;
+    display:flex; align-items:center; gap:6px;
   }
   .level-btn:active { border-color:#6366f1; }
   .level-btn .arrow { font-size:8px; color:#666; }
 
   .level-overlay {
     position:fixed; inset:0; z-index:200;
-    background:rgba(0,0,0,0.7);
-    backdrop-filter:blur(4px);
-    display:none;
-    align-items:center;
-    justify-content:center;
-    animation:fadeIn 0.2s ease;
+    background:rgba(0,0,0,0.7); backdrop-filter:blur(4px);
+    display:none; align-items:center; justify-content:center;
   }
   .level-overlay.open { display:flex; }
-
   .level-modal {
-    background:#161616;
-    border:1px solid #2a2a2a;
-    border-radius:20px;
-    padding:24px;
-    width:85%;
-    max-width:340px;
+    background:#161616; border:1px solid #2a2a2a;
+    border-radius:20px; padding:24px;
+    width:85%; max-width:340px;
     animation:modalSlide 0.3s ease;
   }
   @keyframes modalSlide {
     from { opacity:0; transform:scale(0.95) translateY(10px); }
     to { opacity:1; transform:scale(1) translateY(0); }
   }
-
-  .level-modal h3 {
-    font-family:'Outfit',sans-serif;
-    font-size:16px; font-weight:600;
-    margin-bottom:4px; color:#f0f0f0;
-  }
+  .level-modal h3 { font-family:'Outfit',sans-serif; font-size:16px; font-weight:600; margin-bottom:4px; color:#f0f0f0; }
   .level-modal p { font-size:12px; color:#666; margin-bottom:18px; }
 
   .modal-back {
@@ -102,10 +177,9 @@
     display:flex; align-items:center; gap:12px;
     padding:14px 16px; background:#1e1e1e;
     border:1px solid #2a2a2a; border-radius:14px;
-    margin-bottom:8px; cursor:pointer; transition:all 0.2s;
+    margin-bottom:8px; cursor:pointer;
     font-family:inherit; width:100%; text-align:left; color:#ddd;
   }
-  .level-option:hover { border-color:#444; background:#222; }
   .level-option:active { border-color:#6366f1; }
   .level-option .level-icon {
     width:40px; height:40px; border-radius:12px;
@@ -120,11 +194,10 @@
     display:flex; align-items:center; gap:10px;
     padding:12px 16px; background:#1e1e1e;
     border:1px solid #2a2a2a; border-radius:12px;
-    margin-bottom:6px; cursor:pointer; transition:all 0.2s;
+    margin-bottom:6px; cursor:pointer;
     font-family:inherit; width:100%; text-align:left;
     color:#ddd; font-size:14px; font-weight:500;
   }
-  .class-option:hover { border-color:#444; background:#222; }
   .class-option:active { border-color:#6366f1; }
   .class-option .class-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
 
@@ -133,6 +206,10 @@
     display:flex; flex-direction:column; gap:16px;
     scroll-behavior:smooth;
   }
+
+  .gemo-header { text-align:center; padding:20px 0 10px; }
+  .gemo-header h2 { font-family:'Outfit',sans-serif; font-size:20px; font-weight:700; color:#a5b4fc; }
+  .gemo-header p { font-size:12px; color:#555; margin-top:4px; }
 
   .msg-row { display:flex; gap:10px; max-width:92%; animation: msgSlide 0.35s ease; }
   .msg-row.user { align-self:flex-end; flex-direction:row-reverse; }
@@ -165,29 +242,6 @@
   .typing-indicator span:nth-child(3) { animation-delay:0.4s; }
   @keyframes typing { 0%,60%,100% { transform:translateY(0); opacity:0.4; } 30% { transform:translateY(-6px); opacity:1; } }
 
-  /* Welcome screen (visible avant choix du niveau) */
-  .welcome {
-    text-align:center; padding:30px 24px;
-    animation: fadeIn 0.8s ease;
-    display:flex; flex-direction:column; align-items:center;
-  }
-  .welcome-logo { width:100px; height:100px; margin-bottom:20px; animation: logoPulse 3s ease-in-out infinite; }
-  @keyframes logoPulse { 0%,100% { filter:drop-shadow(0 0 8px rgba(99,102,241,0.3)); } 50% { filter:drop-shadow(0 0 20px rgba(99,102,241,0.5)); } }
-  .welcome h2 { font-family:'Outfit',sans-serif; font-size:26px; font-weight:700; margin-bottom:4px; color:#f0f0f0; letter-spacing:1px; }
-  .welcome .slogan { font-size:11px; color:#6366f1; letter-spacing:3px; text-transform:uppercase; font-weight:600; margin-bottom:16px; }
-  .welcome p { font-size:13px; color:#666; line-height:1.6; max-width:300px; margin:0 auto; }
-
-  /* Gemo header dans le chat */
-  .gemo-header {
-    text-align:center; padding:20px 0 10px;
-    animation: fadeIn 0.5s ease;
-  }
-  .gemo-header h2 {
-    font-family:'Outfit',sans-serif;
-    font-size:20px; font-weight:700; color:#a5b4fc;
-  }
-  .gemo-header p { font-size:12px; color:#555; margin-top:4px; }
-
   .input-bar {
     padding:12px 16px; padding-bottom:max(12px, env(safe-area-inset-bottom));
     display:flex; gap:8px; align-items:flex-end;
@@ -208,40 +262,11 @@
   .send-btn {
     width:40px; height:40px; border-radius:50%; background:#6366f1;
     border:none; color:#fff; display:flex; align-items:center;
-    justify-content:center; cursor:pointer; transition:all 0.2s; flex-shrink:0;
+    justify-content:center; cursor:pointer; flex-shrink:0;
   }
   .send-btn:active { transform:scale(0.9); }
   .send-btn:disabled { opacity:0.3; }
   .send-btn svg { width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; }
-
-  /* Setup screen */
-  .setup-screen {
-    position:fixed; inset:0; z-index:300;
-    background:#0a0a0a;
-    display:flex; flex-direction:column;
-    align-items:center; justify-content:center;
-    padding:30px;
-  }
-  .setup-screen.hidden { display:none; }
-
-  /* Texte multicolore scintillant */
-  .shimmer-text {
-    font-size:13px;
-    font-weight:600;
-    letter-spacing:2px;
-    text-transform:uppercase;
-    background: linear-gradient(90deg, #6366f1, #ec4899, #f59e0b, #22c55e, #3b82f6, #8b5cf6, #6366f1);
-    background-size: 300% 100%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: shimmer 3s linear infinite;
-    margin-bottom:24px;
-  }
-  @keyframes shimmer {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 300% 50%; }
-  }
 </style>
 </head>
 <body>
@@ -260,8 +285,6 @@
     <ellipse cx="60" cy="60" rx="30" ry="30" fill="none" stroke="url(#logoGrad2)" stroke-width="1" opacity="0.25"/>
     <ellipse cx="60" cy="60" rx="15" ry="30" fill="none" stroke="url(#logoGrad2)" stroke-width="1" opacity="0.2"/>
     <line x1="30" y1="60" x2="90" y2="60" stroke="url(#logoGrad2)" stroke-width="1" opacity="0.2"/>
-    <line x1="35" y1="45" x2="85" y2="45" stroke="url(#logoGrad2)" stroke-width="0.8" opacity="0.15"/>
-    <line x1="35" y1="75" x2="85" y2="75" stroke="url(#logoGrad2)" stroke-width="0.8" opacity="0.15"/>
     <path d="M38 52 L58 48 L58 82 L38 78 Z" fill="url(#logoGrad1)" opacity="0.9"/>
     <path d="M82 52 L62 48 L62 82 L82 78 Z" fill="url(#logoGrad1)" opacity="0.7"/>
     <line x1="46" y1="56" x2="54" y2="54" stroke="#a5b4fc" stroke-width="1" opacity="0.6"/>
@@ -273,129 +296,153 @@
     <circle cx="50" cy="36" r="3" fill="#a5b4fc" opacity="0.8"/>
     <circle cx="60" cy="30" r="3.5" fill="#8b5cf6"/>
     <circle cx="70" cy="36" r="3" fill="#a5b4fc" opacity="0.8"/>
-    <circle cx="45" cy="42" r="2" fill="#6366f1" opacity="0.6"/>
-    <circle cx="75" cy="42" r="2" fill="#6366f1" opacity="0.6"/>
     <circle cx="60" cy="40" r="2.5" fill="#a5b4fc" opacity="0.7"/>
     <line x1="50" y1="36" x2="60" y2="30" stroke="#a5b4fc" stroke-width="1" opacity="0.5"/>
     <line x1="70" y1="36" x2="60" y2="30" stroke="#a5b4fc" stroke-width="1" opacity="0.5"/>
     <line x1="50" y1="36" x2="60" y2="40" stroke="#a5b4fc" stroke-width="0.8" opacity="0.4"/>
     <line x1="70" y1="36" x2="60" y2="40" stroke="#a5b4fc" stroke-width="0.8" opacity="0.4"/>
-    <line x1="45" y1="42" x2="50" y2="36" stroke="#6366f1" stroke-width="0.8" opacity="0.3"/>
-    <line x1="75" y1="42" x2="70" y2="36" stroke="#6366f1" stroke-width="0.8" opacity="0.3"/>
-    <circle cx="60" cy="58" r="4" fill="#a5b4fc" opacity="0.15"/>
     <circle cx="60" cy="58" r="2" fill="#fff" opacity="0.4"/>
   </symbol>
 </svg>
 
-<!-- SETUP SCREEN (clé API) -->
-<div class="setup-screen" id="setupScreen">
-  <svg width="80" height="80" style="margin-bottom:20px"><use href="#appLogo"/></svg>
-  <h2 style="font-family:Outfit,sans-serif;font-size:24px;margin-bottom:6px;color:#fff">E-School Liseuse</h2>
+<!-- ===== LANDING PAGE ===== -->
+<div class="landing" id="landing">
+  <div class="particle" style="top:15%;left:10%"></div>
+  <div class="particle" style="top:25%;right:15%;animation-delay:1s;background:#8b5cf6"></div>
+  <div class="particle" style="top:60%;left:20%;animation-delay:2s;background:#ec4899"></div>
+  <div class="particle" style="top:70%;right:25%;animation-delay:3s;background:#22c55e"></div>
+  <div class="particle" style="top:40%;right:10%;animation-delay:0.5s"></div>
+  <div class="particle" style="bottom:20%;left:30%;animation-delay:1.5s;background:#f59e0b"></div>
+
+  <svg class="landing-logo" id="landingLogo" onclick="logoTap()"><use href="#appLogo"/></svg>
+  <h1>E-School Liseuse</h1>
   <div class="shimmer-text">boosté à l'IA</div>
-  <p style="font-size:13px;color:#888;margin-bottom:24px;text-align:center;max-width:300px;line-height:1.5">La première liseuse créer spécifiquement pour l'apprentissage scolaire adapté répondant aux éthiques et problématiques actuelles désormés boosté à l'IA.</p>
-  <input id="apiKeyInput" placeholder="Colle ta clé API ici..." type="password" style="width:100%;max-width:320px;padding:14px 18px;background:#161616;border:1px solid #2a2a2a;border-radius:14px;color:#fff;font-size:14px;font-family:inherit;outline:none;margin-bottom:12px">
-  <button onclick="saveApiKey()" style="width:100%;max-width:320px;padding:14px;background:#6366f1;border:none;border-radius:14px;color:#fff;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit">Commencer</button>
+  <p class="landing-desc">La première liseuse créée spécifiquement pour l'apprentissage scolaire adapté, répondant aux éthiques et problématiques actuelles, désormais boostée à l'IA.</p>
+  <button class="landing-btn" onclick="startApp()">Commencer</button>
 </div>
 
-<!-- HEADER -->
-<div class="header" id="mainHeader" style="display:none">
-  <svg class="header-logo"><use href="#appLogo"/></svg>
-  <div class="header-info">
-    <h1>Gemo</h1>
-    <p><span class="status-dot"></span>En ligne</p>
+<!-- ===== HIDDEN API KEY MODAL (tap logo 5x) ===== -->
+<div class="api-modal" id="apiModal">
+  <div class="api-modal-box">
+    <h3 style="color:#f0f0f0">🔑 Configuration</h3>
+    <p>Entre la clé API Gemini pour activer Gemo.</p>
+    <input id="apiKeyInput" placeholder="Clé API..." type="password" style="width:100%;padding:12px 16px;background:#1e1e1e;border:1px solid #2a2a2a;border-radius:12px;color:#fff;font-size:14px;font-family:inherit;outline:none;margin-bottom:10px">
+    <button onclick="saveApiKey()" style="width:100%;padding:12px;background:#6366f1;border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">Sauvegarder</button>
+    <button onclick="document.getElementById('apiModal').classList.remove('open')" style="width:100%;padding:10px;background:none;border:none;color:#666;font-size:12px;cursor:pointer;font-family:inherit;margin-top:6px">Annuler</button>
   </div>
-  <button class="level-btn" id="levelBtn" onclick="openLevelModal()">
-    <span id="levelLabel">🎓 Choisir niveau</span>
-    <span class="arrow">▼</span>
-  </button>
 </div>
 
-<!-- LEVEL MODAL -->
-<div class="level-overlay" id="levelOverlay" onclick="closeLevelModal(event)">
-  <div class="level-modal" onclick="event.stopPropagation()">
-    <div id="step1">
-      <h3>Quel est ton niveau ?</h3>
-      <p>Gemo adaptera ses explications à ta classe.</p>
-      <button class="level-option" onclick="showStep2('primaire')">
-        <div class="level-icon" style="background:rgba(34,197,94,0.15)">🌱</div>
-        <div class="level-text"><div class="level-name">Primaire</div><div class="level-desc">CP → CM2</div></div>
-      </button>
-      <button class="level-option" onclick="showStep2('college')">
-        <div class="level-icon" style="background:rgba(59,130,246,0.15)">📘</div>
-        <div class="level-text"><div class="level-name">Collège</div><div class="level-desc">6ème → 3ème</div></div>
-      </button>
-      <button class="level-option" onclick="showStep2('lycee')">
-        <div class="level-icon" style="background:rgba(99,102,241,0.15)">🎓</div>
-        <div class="level-text"><div class="level-name">Lycée</div><div class="level-desc">Seconde → Terminale</div></div>
-      </button>
+<!-- ===== MAIN APP ===== -->
+<div class="app" id="mainApp">
+
+  <div class="header">
+    <svg class="header-logo"><use href="#appLogo"/></svg>
+    <div class="header-info">
+      <h1>Gemo</h1>
+      <p><span class="status-dot"></span>En ligne</p>
     </div>
-    <div id="step2" style="display:none">
-      <button class="modal-back" onclick="backToStep1()">← Retour</button>
-      <h3 id="step2Title"></h3>
-      <p>Choisis ta classe exacte.</p>
-      <div id="classOptions"></div>
+    <button class="level-btn" id="levelBtn" onclick="openLevelModal()">
+      <span id="levelLabel">🎓 Choisir niveau</span>
+      <span class="arrow">▼</span>
+    </button>
+  </div>
+
+  <div class="level-overlay" id="levelOverlay" onclick="closeLevelModal(event)">
+    <div class="level-modal" onclick="event.stopPropagation()">
+      <div id="step1">
+        <h3>Quel est ton niveau ?</h3>
+        <p>Gemo adaptera ses explications à ta classe.</p>
+        <button class="level-option" onclick="showStep2('primaire')">
+          <div class="level-icon" style="background:rgba(34,197,94,0.15)">🌱</div>
+          <div class="level-text"><div class="level-name">Primaire</div><div class="level-desc">CP → CM2</div></div>
+        </button>
+        <button class="level-option" onclick="showStep2('college')">
+          <div class="level-icon" style="background:rgba(59,130,246,0.15)">📘</div>
+          <div class="level-text"><div class="level-name">Collège</div><div class="level-desc">6ème → 3ème</div></div>
+        </button>
+        <button class="level-option" onclick="showStep2('lycee')">
+          <div class="level-icon" style="background:rgba(99,102,241,0.15)">🎓</div>
+          <div class="level-text"><div class="level-name">Lycée</div><div class="level-desc">Seconde → Terminale</div></div>
+        </button>
+      </div>
+      <div id="step2" style="display:none">
+        <button class="modal-back" onclick="backToStep1()">← Retour</button>
+        <h3 id="step2Title"></h3>
+        <p>Choisis ta classe exacte.</p>
+        <div id="classOptions"></div>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- CHAT -->
-<div class="chat-area" id="chat" style="display:none">
-  <div class="gemo-header" id="gemoHeader">
-    <h2>Gemo</h2>
-    <p>Ton assistant scolaire socratique</p>
+  <div class="chat-area" id="chat">
+    <div class="gemo-header" id="gemoHeader">
+      <h2>Gemo</h2>
+      <p>Ton assistant scolaire socratique</p>
+    </div>
   </div>
-</div>
 
-<!-- INPUT BAR -->
-<div class="input-bar" id="inputBar" style="display:none">
-  <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none" onchange="handlePhoto(this)">
-  <button onclick="document.getElementById('cameraInput').click()" style="width:40px;height:40px;border-radius:50%;background:#161616;border:1px solid #2a2a2a;color:#a5b4fc;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0">📷</button>
-  <div class="input-wrapper">
-    <textarea class="input-field" id="input" placeholder="Demander à Gemo..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+  <div class="input-bar">
+    <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none" onchange="handlePhoto(this)">
+    <button onclick="document.getElementById('cameraInput').click()" style="width:40px;height:40px;border-radius:50%;background:#161616;border:1px solid #2a2a2a;color:#a5b4fc;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0">📷</button>
+    <div class="input-wrapper">
+      <textarea class="input-field" id="input" placeholder="Demander à Gemo..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+    </div>
+    <button class="send-btn" id="sendBtn" onclick="ask()">
+      <svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg>
+    </button>
   </div>
-  <button class="send-btn" id="sendBtn" onclick="ask()">
-    <svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg>
-  </button>
+
 </div>
 
 <script>
 var API_KEY = localStorage.getItem('ereader_api_key') || '';
 var currentClass = null;
 var history = [];
+var logoTapCount = 0;
+var logoTapTimer = null;
 
-/* ===== SETUP & INIT ===== */
+/* ===== LOGO TAP SECRET (5 taps = config API key) ===== */
+function logoTap() {
+  logoTapCount++;
+  if (logoTapTimer) clearTimeout(logoTapTimer);
+  logoTapTimer = setTimeout(function() { logoTapCount = 0; }, 2000);
+  if (logoTapCount >= 5) {
+    logoTapCount = 0;
+    document.getElementById('apiKeyInput').value = API_KEY;
+    document.getElementById('apiModal').classList.add('open');
+  }
+}
+
 function saveApiKey() {
   var k = document.getElementById('apiKeyInput').value.trim();
   if (k.length < 10) return;
   API_KEY = k;
   localStorage.setItem('ereader_api_key', k);
-  document.getElementById('setupScreen').classList.add('hidden');
-  showApp();
-  openLevelModal();
+  document.getElementById('apiModal').classList.remove('open');
 }
 
-function showApp() {
-  document.getElementById('mainHeader').style.display = 'flex';
-  document.getElementById('chat').style.display = 'flex';
-  document.getElementById('inputBar').style.display = 'flex';
-}
+/* ===== START APP ===== */
+function startApp() {
+  if (!API_KEY) {
+    document.getElementById('apiKeyInput').value = '';
+    document.getElementById('apiModal').classList.add('open');
+    return;
+  }
+  document.getElementById('landing').classList.add('hidden');
+  document.getElementById('mainApp').classList.add('visible');
+  document.body.style.overflow = 'auto';
 
-function init() {
-  if (API_KEY) {
-    document.getElementById('setupScreen').classList.add('hidden');
-    showApp();
-    var savedClass = localStorage.getItem('ereader_class');
-    if (savedClass) {
-      currentClass = savedClass;
-      var savedLabel = localStorage.getItem('ereader_class_label') || '';
-      document.getElementById('levelLabel').textContent = savedLabel;
-    } else {
-      openLevelModal();
-    }
+  var savedClass = localStorage.getItem('ereader_class');
+  if (savedClass) {
+    currentClass = savedClass;
+    var savedLabel = localStorage.getItem('ereader_class_label') || '';
+    document.getElementById('levelLabel').textContent = savedLabel;
+  } else {
+    openLevelModal();
   }
 }
 
-/* ===== CLASSES & PROMPTS ===== */
+/* ===== CLASSES ===== */
 var CLASSES = {
   primaire: {
     title: '🌱 Primaire', color: '#22c55e',
@@ -427,21 +474,21 @@ var CLASSES = {
 };
 
 var CLASS_PROMPTS = {
-  cp: 'NIVEAU : CP (environ 6 ans). Mots très simples, phrases très courtes. Exemples avec jouets, animaux, famille. Très chaleureux et patient.',
-  ce1: 'NIVEAU : CE1 (environ 7 ans). Vocabulaire simple, phrases courtes. Exemples concrets. Très encourageant.',
+  cp: 'NIVEAU : CP (environ 6 ans). Mots très simples, phrases très courtes. Exemples avec jouets, animaux. Très chaleureux.',
+  ce1: 'NIVEAU : CE1 (environ 7 ans). Vocabulaire simple, phrases courtes. Très encourageant.',
   ce2: 'NIVEAU : CE2 (environ 8 ans). Vocabulaire simple mais plus riche. Exemples imagés.',
-  cm1: 'NIVEAU : CM1 (environ 9 ans). Termes un peu plus précis mais toujours expliqués.',
+  cm1: 'NIVEAU : CM1 (environ 9 ans). Termes plus précis mais toujours expliqués.',
   cm2: 'NIVEAU : CM2 (environ 10 ans). Plus de profondeur tout en restant accessible.',
-  '6eme': 'NIVEAU : 6ème (environ 11 ans). Introduction progressive de termes techniques toujours expliqués.',
+  '6eme': 'NIVEAU : 6ème (environ 11 ans). Introduction progressive de termes techniques expliqués.',
   '5eme': 'NIVEAU : 5ème (environ 12 ans). Vocabulaire plus riche, termes scientifiques expliqués.',
   '4eme': 'NIVEAU : 4ème (environ 13 ans). Plus de profondeur, termes techniques avec explications concises.',
-  '3eme': 'NIVEAU : 3ème (environ 14 ans). Préparation brevet. Vocabulaire précis, rigueur du raisonnement.',
-  seconde: 'NIVEAU : Seconde (environ 15 ans). Vocabulaire technique précis. Autonomie et réflexion critique.',
-  premiere: 'NIVEAU : Première (environ 16 ans). Exigence élevée. Vocabulaire riche. Argumentation et analyse.',
-  terminale: 'NIVEAU : Terminale (environ 17 ans). Exigence maximale. Raisonnements approfondis, esprit critique.'
+  '3eme': 'NIVEAU : 3ème (environ 14 ans). Préparation brevet. Vocabulaire précis, rigueur.',
+  seconde: 'NIVEAU : Seconde (environ 15 ans). Vocabulaire technique précis. Réflexion critique.',
+  premiere: 'NIVEAU : Première (environ 16 ans). Exigence élevée. Argumentation et analyse.',
+  terminale: 'NIVEAU : Terminale (environ 17 ans). Exigence maximale. Esprit critique.'
 };
 
-var BASE_PROMPT = 'Tu t\'appelles Gemo. Tu es un assistant pédagogique intégré dans E-School Liseuse, une liseuse éducative pour élèves français.\n\nMÉTHODE SOCRATIQUE (obligatoire) :\n- Tu ne donnes JAMAIS la réponse directement.\n- Tu poses d\'abord une question pour comprendre ce que l\'élève sait déjà.\n- Tu le guides étape par étape en l\'accompagnant.\n\nMATIÈRES : Toutes les matières scolaires (Maths, Français, Histoire-Géo, Physique-Chimie, SVT, Philosophie, NSI, SES, langues, etc.)\n\nSTYLE :\n- Tu es concis. Réponses courtes et claires, pas de pavés.\n- Tu utilises du **gras** pour les concepts importants.\n- Tu utilises des emojis avec parcimonie (1-2 max par message).\n- Tu tutoies l\'élève. Tu es bienveillant et encourageant tout en étant exigeant.\n\nLIMITES :\n- Tu refuses poliment les sujets hors programme scolaire.\n- Tu ne fais JAMAIS les devoirs à la place de l\'élève.\n- Si l\'élève insiste pour la réponse, tu expliques pourquoi comprendre par soi-même est plus important.';
+var BASE_PROMPT = 'Tu t\'appelles Gemo. Tu es un assistant pédagogique intégré dans E-School Liseuse, une liseuse éducative pour élèves français.\n\nMÉTHODE SOCRATIQUE (obligatoire) :\n- Tu ne donnes JAMAIS la réponse directement.\n- Tu poses d\'abord une question pour comprendre ce que l\'élève sait déjà.\n- Tu le guides étape par étape.\n\nMATIÈRES : Toutes les matières scolaires.\n\nSTYLE :\n- Concis. Réponses courtes et claires.\n- **gras** pour les concepts importants.\n- Emojis avec parcimonie (1-2 max).\n- Tu tutoies. Bienveillant et encourageant.\n\nLIMITES :\n- Refuse poliment les sujets hors programme.\n- Ne fais JAMAIS les devoirs à la place de l\'élève.';
 
 function getSystemPrompt() {
   var cp = currentClass ? CLASS_PROMPTS[currentClass] : 'NIVEAU : Non spécifié.';
@@ -525,14 +572,7 @@ async function ask() {
     try {
       var res = await fetch(
         'https://generativelanguage.googleapis.com/v1beta/models/' + models[i] + ':generateContent?key=' + API_KEY,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            system_instruction: { parts: [{ text: getSystemPrompt() }] },
-            contents: history
-          })
-        }
+        { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ system_instruction: { parts: [{ text: getSystemPrompt() }] }, contents: history }) }
       );
       var data = await res.json();
       if (data && data.error) { continue; }
@@ -549,7 +589,7 @@ async function ask() {
   if (!success) {
     history.pop();
     var typing2 = document.getElementById(typingId);
-    if (typing2) typing2.querySelector('.bubble').innerHTML = '<span style="color:#ef4444">Erreur de connexion. Vérifie ton internet et ta clé API.</span>';
+    if (typing2) typing2.querySelector('.bubble').innerHTML = '<span style="color:#ef4444">Erreur. Vérifie ton internet.</span>';
   }
 
   btn.disabled = false;
@@ -558,9 +598,9 @@ async function ask() {
 }
 
 /* ===== PHOTO ===== */
-async function handlePhoto(input) {
-  if (!input.files || !input.files[0]) return;
-  var file = input.files[0];
+async function handlePhoto(inputEl) {
+  if (!inputEl.files || !inputEl.files[0]) return;
+  var file = inputEl.files[0];
   var reader = new FileReader();
   reader.onload = async function(e) {
     var base64 = e.target.result.split(',')[1];
@@ -575,7 +615,7 @@ async function handlePhoto(input) {
     typingRow.innerHTML = '<div class="msg-avatar"><svg width="20" height="20"><use href="#appLogo"/></svg></div><div class="bubble"><div class="typing-indicator"><span></span><span></span><span></span></div></div>';
     document.getElementById('chat').appendChild(typingRow);
     document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
-    var contents = [{ role: 'user', parts: [{ inline_data: { mime_type: mimeType, data: base64 } }, { text: 'Voici une photo d\'un exercice ou d\'un cours. Analyse-le et aide l\'élève en utilisant la méthode socratique. Ne donne pas la réponse directement.' }] }];
+    var contents = [{ role: 'user', parts: [{ inline_data: { mime_type: mimeType, data: base64 } }, { text: 'Voici une photo d\'un exercice ou d\'un cours. Analyse-le et aide l\'élève avec la méthode socratique. Ne donne pas la réponse directement.' }] }];
     var models = ['gemini-2.5-flash-lite'];
     var success = false;
     for (var i = 0; i < models.length; i++) {
@@ -592,11 +632,11 @@ async function handlePhoto(input) {
         break;
       } catch (e) { continue; }
     }
-    if (!success) { var typing2 = document.getElementById(typingId); if (typing2) typing2.querySelector('.bubble').innerHTML = '<span style="color:#ef4444">Erreur. Vérifie ton internet ou ta clé API.</span>'; }
+    if (!success) { var typing2 = document.getElementById(typingId); if (typing2) typing2.querySelector('.bubble').innerHTML = '<span style="color:#ef4444">Erreur. Vérifie ton internet.</span>'; }
     document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
   };
   reader.readAsDataURL(file);
-  input.value = '';
+  inputEl.value = '';
 }
 
 /* ===== UTILS ===== */
@@ -622,8 +662,6 @@ function formatText(t) {
     .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>')
     .replace(/\n/g, '<br>');
 }
-
-init();
 </script>
 </body>
 </html>
