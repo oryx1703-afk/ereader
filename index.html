@@ -316,7 +316,7 @@ html, body, .landing, .header, .input-bar { background:#f0e8dc !important; }
   <div class="particle" style="top:40%;right:10%;animation-delay:0.5s"></div>
   <div class="particle" style="bottom:20%;left:30%;animation-delay:1.5s;background:#f59e0b"></div>
 
-  <svg class="landing-logo" id="landingLogo" onclick="logoTap()"><use href="#appLogo"/></svg>
+  <img src="logo.png" class="landing-logo" id="landingLogo" onclick="logoTap()" style="border-radius:20px">
   <h1>E-School Liseuse</h1>
   <div class="shimmer-text">boosté à l'IA</div>
   <p class="landing-desc">La première liseuse créée spécifiquement pour l'apprentissage scolaire adapté, répondant aux éthiques et problématiques actuelles, désormais boostée à l'IA.</p>
@@ -338,7 +338,7 @@ html, body, .landing, .header, .input-bar { background:#f0e8dc !important; }
 <div class="app" id="mainApp">
 
   <div class="header">
-    <svg class="header-logo"><use href="#appLogo"/></svg>
+    <img src="logo.png" class="header-logo" style="border-radius:8px">
     <div class="header-info">
       <h1>Gemo</h1>
       <p><span class="status-dot"></span>En ligne</p>
@@ -561,7 +561,7 @@ async function ask() {
   var typingRow = document.createElement('div');
   typingRow.className = 'msg-row ai';
   typingRow.id = typingId;
-  typingRow.innerHTML = '<div class="msg-avatar"><svg width="20" height="20"><use href="#appLogo"/></svg></div><div class="bubble"><div class="typing-indicator"><span></span><span></span><span></span></div></div>';
+  typingRow.innerHTML = '<div class="msg-avatar"><img src="logo.png" width="20" height="20" style="border-radius:4px"></div><div class="bubble"><div class="typing-indicator"><span></span><span></span><span></span></div></div>';
   chat.appendChild(typingRow);
   chat.scrollTop = chat.scrollHeight;
 
@@ -614,7 +614,7 @@ async function handlePhoto(inputEl) {
     var typingRow = document.createElement('div');
     typingRow.className = 'msg-row ai';
     typingRow.id = typingId;
-    typingRow.innerHTML = '<div class="msg-avatar"><svg width="20" height="20"><use href="#appLogo"/></svg></div><div class="bubble"><div class="typing-indicator"><span></span><span></span><span></span></div></div>';
+    typingRow.innerHTML = '<div class="msg-avatar"><img src="logo.png" width="20" height="20" style="border-radius:4px"></div><div class="bubble"><div class="typing-indicator"><span></span><span></span><span></span></div></div>';
     document.getElementById('chat').appendChild(typingRow);
     document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
     var contents = [{ role: 'user', parts: [{ inline_data: { mime_type: mimeType, data: base64 } }, { text: 'Voici une photo d\'un exercice ou d\'un cours. Analyse-le et aide l\'élève avec la méthode socratique. Ne donne pas la réponse directement.' }] }];
@@ -649,7 +649,7 @@ function addMessage(text, type) {
   if (type === 'user') {
     row.innerHTML = '<div class="msg-avatar">👤</div><div class="bubble">' + escapeHtml(text) + '</div>';
   } else {
-    row.innerHTML = '<div class="msg-avatar"><svg width="20" height="20"><use href="#appLogo"/></svg></div><div class="bubble">' + formatText(text) + '</div>';
+    row.innerHTML = '<div class="msg-avatar"><img src="logo.png" width="20" height="20" style="border-radius:4px"></div><div class="bubble">' + formatText(text) + '</div>';
   }
   chat.appendChild(row);
   chat.scrollTop = chat.scrollHeight;
